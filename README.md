@@ -1,4 +1,4 @@
-# Automation testing via WebDriverIO using JS and Mocha framework
+# End-to-End UI Automation Framework with WebDriverIO, Node.js, and Mocha
 
 ## Project Overview
 
