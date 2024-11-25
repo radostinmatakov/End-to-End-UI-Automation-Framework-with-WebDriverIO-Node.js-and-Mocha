@@ -2,38 +2,46 @@
 
 ## Project Overview
 
-Automation Web UI testing of "www.saucedemo.com" for practice perpuses in order to create and maintain a fully functional automation framework, following automation best practices.
+This project is a non-executable framework, that I have built from scratch, designed to showcase the structure and principles of a robust UI testing framework. The focus is on demonstrating key software engineering concepts such as Page Object Model (POM), inheritance, data handling, and encapsulation in the context of test automation.
 
-## Project Description
+## Project Purpose
 
-The primary goal of this project is to verify that the delivered software meets user requirements and is production-ready. This is achieved through a comprehensive testing process that ensures stability and quality.
+The primary goal of this repository is to provide a template for learning and understanding the architecture of a scalable and maintainable UI testing framework. It includes examples of:
 
-## Functional Requirements
+### 1. Page Object Model (POM): Simplifying and organizing code by separating page-specific actions and elements into individual classes.
 
-### 1. Planning
+### 2. Inheritance: Utilizing base classes for shared methods and properties across different components.
 
-- Prepare a detailed plan with estimates for each activity involved in the testing process.
+### 3. Data Handling: Managing test data efficiently for parameterized tests or dynamic inputs.
 
-### 2. Test Plan
+### 4. Encapsulation: Ensuring modularity and protecting the framework components from unintended access or modification.
 
-- Create a test plan that outlines all activities required to verify the quality of the product. Follow templates and guides covered in the materials from the lectures.
+## Key Features
 
-### 3. Test Cases
+### 1. Built from Scratch: Every component in this project was designed and implemented without relying on pre-existing templates.
 
-- Develop high-level test cases that ensure the required quality level and cover customer requirements by covering the possitive and negative outcomes.
+### 2. Well-structured folder hierarchy for organizing framework components.
 
-### 4. Execution
+### 3. Examples of class relationships to demonstrate object-oriented programming principles.
 
-#### 4.1 Automation Testing
+### 4. Placeholder code snippets for key functionalities, such as:
 
-- Create automated test suites to cover possitive testing(happy path).
-- Create automated test suites to cover negative testing.
-- Ensure detailed reports for each execution, providing information on the number of tests that pass/fail.
+#### Page classes representing different parts of a UI.
 
-##### 4.1.1 UI Testing
+#### Test classes showcasing inheritance and interaction with POM elements.
 
-- Utilize WebRriverIO for UI testing.
+#### Utility classes for common operations (e.g., data handling or logging).
 
-### 5. Reporting
+### 5. OOP Principles: Demonstrating inheritance and encapsulation to enhance framework scalability.
 
-- Generate reports that summarize the testing process via Allure reporting.
+## Limitations
+
+This project is not executable and does not include real data, configurations, or runtime scripts. Its sole purpose is to serve as an educational resource for understanding the framework's architecture that
+
+## How to Use
+
+### 1. Explore the code: Review the folder structure and class relationships to understand the framework design.
+
+### 2. Learn concepts: Identify how POM, inheritance, data handling, and encapsulation are applied.
+
+### 3. Extend for practice: You can build upon this structure to create your own executable test automation project.
