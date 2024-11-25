@@ -26,11 +26,11 @@ The primary goal of this repository is to provide a template for learning and un
 
 ### 4. Placeholder code snippets for key functionalities, such as:
 
-#### Page classes representing different parts of a UI.
+- **Page classes representing different parts of a UI.
 
-#### Test classes showcasing inheritance and interaction with POM elements.
+- **Test classes showcasing inheritance and interaction with POM elements.
 
-#### Utility classes for common operations (e.g., data handling or logging).
+- **Utility classes for common operations (e.g., data handling or logging).
 
 ### 5. OOP Principles: Demonstrating inheritance and encapsulation to enhance framework scalability.
 
