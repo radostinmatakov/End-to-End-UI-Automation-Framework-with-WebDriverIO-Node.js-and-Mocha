@@ -3,8 +3,8 @@ class TestConfig {
     static emptyTable = 'No records';
 
     // Login page - Admin credentials 
-    static emailAdmin = 'axiom@squaretalk.com';
-    static passwordAdmin = 'axioma@squaretalk.com';
+    static emailAdmin = 'example.com';
+    static passwordAdmin = 'example.com';
 
     // Queue's page 
     static queuesNum = '9998';
