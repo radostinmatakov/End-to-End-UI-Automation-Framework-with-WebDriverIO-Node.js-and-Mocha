@@ -1,0 +1,35 @@
+{
+  "name": "qa-axiom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "queues": "npx wdio test/conf/Positive/queues.conf.js",
+    "roles": "npx wdio test/conf/Positive/roles.conf.js",
+    "users": "npx wdio test/conf/Positive/users.conf.js",
+    "groups": "npx wdio test/conf/Positive/groups.conf.js",
+    "statuses": "npx wdio test/conf/Positive/statuses.conf.js",
+
+    "queues_N": "npx wdio test/conf/Negative/queues.conf_N.js",
+    "roles_N": "npx wdio test/conf/Negative/roles.conf_N.js",
+    "users_N": "npx wdio test/conf/Negative/users.conf_N.js",
+    "groups_N": "npx wdio test/conf/Negative/groups.conf_N.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^5.1.1",
+    "mocha": "^10.4.0",
+    "selenium-standalone": "^9.5.0",
+    "webdriverio": "^8.36.1"
+  },
+  "devDependencies": {
+    "@wdio/allure-reporter": "^8.39.0",
+    "@wdio/cli": "^8.39.0",
+    "@wdio/local-runner": "^8.39.0",
+    "@wdio/mocha-framework": "^8.39.0",
+    "@wdio/spec-reporter": "^8.39.0",
+    "wdio-lambdatest-service": "^3.0.1"
+  }
+}
