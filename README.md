@@ -1,4 +1,4 @@
-# End-to-End UI Automation Framework with WebDriverIO, Node.js, and Mocha
+# End-to-End UI Automation Framework with WebDriverIO, Node.js(Java Script) and Mocha
 
 ## Project Overview
 
