@@ -3,7 +3,7 @@ exports.config = {
     runner: 'local',
 
     specs: [
-        '../../specs/Positive tests/test.groups.js'
+        '../../specs/Positive_tests/Sideview_menu/test.groups.js'
     ],
 
     capabilities: [  
@@ -42,16 +42,14 @@ exports.config = {
         ui: 'bdd',
         timeout: 60000
     },
-    /*
+    
     before: function (capabilities, specs) {
-        // Generate the random name and store it in a global variable or property - QUEUES
-        global.queuesName = NameGenerator.generateRandomQueueName(); 
-        // Generate the edited queue's name
-        global.editQueuesName = `${global.queuesName}Edit`;
-        // Generate the copied queue's name
-        global.copyQueuesName = `${global.queuesName}Copy`;    
+        // Generate the random name and store it in a global variable or property - GROUPS
+        global.groupName = NameGenerator.generateRandomGroupName(); 
+        // Generate the edited group's name
+        global.editGroupName = `${global.groupName}Edit`; 
     },
-    */
+    
    
     beforeTest: function (test, context) {
         browser.maximizeWindow();

@@ -17,31 +17,58 @@ class AssertionsGroups {
     get emptyTable() {
         return $("(//div[@class='mantine-focus-auto m_b6d8b162 mantine-Text-root'])[2]");
     }
+    get emptyTable() {
+        return $("(//div[contains(@class, 'mantine-Text-root') and text()='No data available'])[2]");
+    }
+    get emptyTableTwo() {
+        return $("(//div[contains(@class, 'mantine-Text-root') and text()='No data available'])[1]");
+    }
+    get emptyTableIcon() {
+        return $("div[class='mantine-datatable-empty-state-icon']");
+    }
     get notifyMessage() {
         return $('#swal2-title');
-    }
-    get quickView() {
-        return $("div[class='m_d57069b5 mantine-ScrollArea-root']"); 
     }
 
     // Assertions methods to encapsule automation code to interact with the page
     // Message assertion 
     async waitForSuccessMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertSuccessMessage(message) {
         await this.waitForSuccessMessage();
         await expect(this.notifyMessage).toHaveText(expect.stringContaining(message));
     }
     async waitForUpdateMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertUpdateMessage(message) {
         await this.waitForUpdateMessage();
         await expect(this.notifyMessage).toHaveText(expect.stringContaining(message));
     }
     async waitForDeleteMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertDeleteMessage(message) {
         await this.waitForDeleteMessage();
@@ -55,11 +82,11 @@ class AssertionsGroups {
     async assertCreatedGroupTextAttributes(expectedName, expectedDesc, expectedMembers) {
         await this.waitForCreatedGroupAttributes();
         const actualName = await this.groupName.getText();
-        assert.ok(actualName.includes(expectedName), `Expected "${expectedName}" to be in "${actualName}"`);
+        assert.ok(actualName.includes(global.groupName), `Expected "${global.groupName}" to be in "${actualName}"`);
         const actualDesc = await this.desc.getText();
-        assert.ok(actualDesc.includes(expectedDesc), `Expected "${expectedDesc}" to be in "${actualDesc}"`);
+        assert.strictEqual(actualDesc, 'Testing Group', 'Expected Group description is not present');
         const actualMember = await this.members.getText();
-        assert.ok(actualMember.includes(expectedMembers), `Expected "${expectedMembers}" to be in "${actualMember}"`);
+        assert.strictEqual(actualMember, '3', 'Expected Group members is not present');
     }
     
     async waitForEditedGroupAttributes() {
@@ -68,11 +95,11 @@ class AssertionsGroups {
     async assertEditedGroupTextAttributes(expectedName, expectedDesc, expectedMembers) {
         await this.waitForEditedGroupAttributes();
         const actualName = await this.groupName.getText();
-        assert.ok(actualName.includes(expectedName), `Expected "${expectedName}" to be in "${actualName}"`);
+        assert.ok(actualName.includes(global.editGroupName), `Expected "${global.editGroupName}" to be in "${actualName}"`);
         const actualDesc = await this.desc.getText();
-        assert.ok(actualDesc.includes(expectedDesc), `Expected "${expectedDesc}" to be in "${actualDesc}"`);
+        assert.strictEqual(actualDesc, 'Testing Group Edit', 'Expected Group description is not present');
         const actualMember = await this.members.getText();
-        assert.ok(actualMember.includes(expectedMembers), `Expected "${expectedMembers}" to be in "${actualMember}"`);
+        assert.strictEqual(actualMember, '2', 'Expected Group members is not present');
     }
 
     async waitForQuickView() {
@@ -139,6 +166,16 @@ class AssertionsGroups {
         await this.waitForEmptyTable(); 
         const messageText = await this.emptyTable.getText();
         expect(messageText).toContain(expectedMessage);
+    }
+    async assertEmptyTableTwo(expectedMessage) {
+        await this.waitForEmptyTable(); 
+        const messageText = await this.emptyTableTwo.getText();
+        expect(messageText).toContain(expectedMessage);
+    }
+    async assertEmptyTableIcon() {
+        await this.waitForEmptyTable(); 
+        const isDisplayed = await this.emptyTableIcon.isDisplayed();
+        expect(isDisplayed).toBe(true);
     }
 }
 

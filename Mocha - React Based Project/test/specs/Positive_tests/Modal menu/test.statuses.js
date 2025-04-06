@@ -1,7 +1,7 @@
-const LoginPageAdmin = require('../../pageobjects_main/login.page.admin.js')
+const LoginPageAdmin = require('../../../pageobjects_main/login.page.admin.js')
 const StatusPage = require('../../pageobjects_main/pageobjects/statuses.page')
-const AssertionsStatus = require('../../helpers/assertions.statuses')
-const TestConfig = require('../../data/TestConfig');
+const AssertionsStatus = require('../../../helpers/assertions.statuses.js')
+const TestConfig = require('../../../data/TestConfig.js');
 
 describe('Login in Axiom as admin', () => {
     it('Succsesfully login with valid credentials', async () => {

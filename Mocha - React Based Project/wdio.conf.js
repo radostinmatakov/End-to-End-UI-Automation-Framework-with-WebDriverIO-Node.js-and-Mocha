@@ -26,6 +26,10 @@ exports.config = {
     specs: [
         './test/specs/**/*.js'
     ],
+    
+    // npx wdio run wdio.conf.js --spec "./test/specs/Positive_tests/Sideview_menu/test.queues.js" "./test/specs/Positive_tests/Sideview_menu/test.ivr.js" 
+    // "./test/specs/Positive_tests/Sideview_menu/test.announcements.js" "./test/specs/Positive_tests/Sideview_menu/test.ext.js"
+
     // Patterns to exclude.
     exclude: [
         // 'path/to/excluded/files'
@@ -46,22 +50,22 @@ exports.config = {
     // and 30 processes will get spawned. The property handles how many capabilities
     // from the same test should run tests.
     //
-    maxInstances: 3,
+    maxInstances: 5,
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://saucelabs.com/platform/platform-configurator
     //
-    capabilities: [  
+    capabilities: [
         // capabilities for local browser web tests
-        {  
+        {
           'browserName': 'chrome',  // or "firefox", "microsoftedge", "safari"
-          'goog:chromeOptions': {  
+          'goog:chromeOptions': {
             args: [
                 '--disable-search-engine-choice-screen',
                 '--disable-infobars', // Disable "Chrome is being controlled by automated test software."
-                //'--no-sandbox', '--disable-dev-shm-usage', '--headless', '--disable-gpu' // Disable when running on local machine 
-            ],   
+                //'--no-sandbox', '--disable-dev-shm-usage', '--headless', '--disable-gpu' // Disable when running on local machine
+            ],
             prefs: {
                 'profile.default_content_setting_values.media_stream_mic': 1, // Allow microphone access
                 'credentials_enable_service': false, // Disable Chrome's credential service
@@ -70,7 +74,7 @@ exports.config = {
           },
         }
     ],
-  
+
     //
     // ===================
     // Test Configurations
@@ -105,7 +109,7 @@ exports.config = {
     // baseUrl: 'http://localhost:8080',
     //
     // Default timeout for all waitFor* commands.
-    waitforTimeout: 10000,
+    waitforTimeout: 20000,
     //
     // Default timeout in milliseconds for request
     // if browser driver or grid doesn't send response
@@ -127,7 +131,7 @@ exports.config = {
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
     framework: 'mocha',
-    
+
     //
     // The number of times to retry the entire specfile when it fails as a whole
     // specFileRetries: 1,
@@ -142,7 +146,7 @@ exports.config = {
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
     reporters: ['spec',
-        ['allure', 
+        ['allure',
             {
             outputDir: 'allure-results',
             disableWebdriverStepsReporting: true,
@@ -211,12 +215,16 @@ exports.config = {
      * @param {object}         browser      instance of created browser/device session
      */
     before: function (capabilities, specs) {
+        // Global variables for triggering the automation pipeline form Jenkins
+        global.destination = process.env.DESTINATION;
+        global.project = process.env.PROJECT;
+
         // Generate the random name and store it in a global variable or property - QUEUES
-        global.queuesName = NameGenerator.generateRandomQueueName(); 
+        global.queuesName = NameGenerator.generateRandomQueueName();
         // Generate the edited queue's name
         global.editQueuesName = `${global.queuesName}Edit`;
         // Generate the copied queue's name
-        global.copyQueuesName = `${global.queuesName}Copy`;   
+        global.copyQueuesName = `${global.queuesName}Copy`;
 
         // Generate the random name and store it in a global variable or property - USERS (and Before mothod in Roles page)
         global.usersNameWeb = NameGenerator.generateRandomUserNameWeb(); 
@@ -224,10 +232,70 @@ exports.config = {
         global.usersNameSip = NameGenerator.generateRandomUserNameSip(); 
         global.usersEmailSip = NameGenerator.generateRandomUserEmailSip();
         global.usersPass = NameGenerator.generateRandomUserPassword();
+        global.usersNameExt = NameGenerator.generateRandomUserNameExt();
+        global.usersEmailExt = NameGenerator.generateRandomUserEmailExt();
+        global.usersNameMesQ = NameGenerator.generateRandomUserNameMesQ();
+        global.usersEmailMesQ = NameGenerator.generateRandomUserEmailMesQ(); 
+        global.usersNameRoles = NameGenerator.generateRandomUserNameRoles();
+        global.usersEmailRoles = NameGenerator.generateRandomUserRoles();
         // Generate the edited user's name
-        global.editUsersNameWeb = `${global.usersNameWeb}EditWeb`;    
-        global.editUsersNameSip = `${global.usersNameWeb}EditSip`;
-        
+        global.editUsersNameWeb = `${global.usersNameWeb}EditWeb`;
+        global.editUsersNameSip = `${global.usersNameSip}EditSip`;
+
+        // Generate the random name and pass and store it in a global variable or property - STATUS
+        global.statusName = NameGenerator.generateRandomStatusName();
+        // Generate the edited status name
+        global.editStatusName = `${global.statusName}Edit`;
+
+        // Generate the random name and pass and store it in a global variable or property - IVR
+        global.IVRName = NameGenerator.generateRandomIVRName();
+        // Generate the edited IVR name
+        global.editIVRName = `${global.IVRName}Edit`; 
+        // Generate the copied IVR name
+        global.copyIVRName = `${global.IVRName}Copy`; 
+
+        // Generate the random name and pass and store it in a global variable or property - ANNOUNCEMENTS
+        global.annDesc = NameGenerator.generateRandomAnnDesc();
+        // Generate the edited Ann name
+        global.editAnnDesc = `${global.annDesc}Edit`; 
+
+        // Generate the random name and pass and store it in a global variable or property - TIME CONDITIONS
+        global.TcName = NameGenerator.generateRandomTcName();
+        // Generate the edited Tc name
+        global.editTcname = `${global.TcName}Edit`; 
+
+        // Generate the random name and store it in a global variable or property - GROUPS
+        global.groupName = NameGenerator.generateRandomGroupName(); 
+        global.groupNameExt = NameGenerator.generateRandomGroupNameExt();
+        // Generate the edited group's name
+        global.editGroupName = `${global.groupName}Edit`; 
+
+        // Generate the random name and store it in a global variable or property - EXTENSIONS
+        global.extNameWEB = NameGenerator.generateRandomExtNameWeb(); 
+        global.extNameWEBRole = NameGenerator.generateRandomExtNameWebRoles();
+        global.extNameSIP = NameGenerator.generateRandomExtNameSip();
+        // Generate the edited exstension's name
+        global.editExtNameWeb = `${global.extNameWEB}Edit`;  
+        global.editExtNameSip = `${global.extNameSIP}Edit`;
+
+        // Generate the random name and store it in a global variable or property - MESSAGING QUEUES
+        global.mesQueuesName = NameGenerator.generateRandomMesQueueName(); 
+        // Generate the edited queue's name
+        global.editMesQueuesName = `${global.mesQueuesName}Edit`;
+        // Generate the copied queue's name
+        global.copyMesQueuesName = `${global.mesQueuesName}Copy`;  
+
+        // Generate the random name and store it in a global variable or property - BLACKLISTS
+        global.blacklistDesc = NameGenerator.generateRandomBlacklistDesc(); 
+        global.editblacklistDesc = `${global.blacklistDesc}Edit`;  
+        global.blacklistNum = NameGenerator.generateRandomBGPhoneNumber();  
+
+        // Generate the random name and store it in a global variable or property - IP MANAGEMENT
+        global.ipAdress = NameGenerator.generateRandomIPAddress(); 
+        global.ipDesc = NameGenerator.generateRandomIpDesc(); 
+        global.geoIpDesc = NameGenerator.generateRandomGeoIpDesc(); 
+        global.editIpDesc = `${global.ipDesc}Edit`; 
+        global.editGeoIpDesc = `${global.geoIpDesc}Edit`; 
     },
     /**
      * Runs before a WebdriverIO command gets executed.

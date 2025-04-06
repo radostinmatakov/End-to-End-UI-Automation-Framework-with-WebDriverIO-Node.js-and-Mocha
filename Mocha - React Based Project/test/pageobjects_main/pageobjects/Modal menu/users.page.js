@@ -1,6 +1,6 @@
 const assert = require('assert');
 const { $ } = require('@wdio/globals')
-const Page = require('../page');
+const Page = require('../../page');
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -29,7 +29,13 @@ class UsersPage extends Page {
         return $("select[name='type'] option[value='0']");
     }
     get extension () {
-        return $("div[class='css-19bb58m']");
+        return $(".css-19bb58m");
+    }
+    get extensionValueRoles () {
+        return $("span[child-key='114']");
+    }
+    get extensionValueRolesN () {
+        return $("span[child-key='115']");
     }
     get extensionValueWeb () {
         return $("span[child-key='111']");
@@ -45,6 +51,9 @@ class UsersPage extends Page {
     get levelBefore () {
         return $("select[name='level_id'] option[value='3']"); // Manager
     }
+    get roleBeforeN () {
+        return $("//select[@name='role_id']/option[normalize-space(text())='TestNRole']"); // Before method in Roles page
+    }
     get roleBefore () {
         return $("//select[@name='role_id']/option[normalize-space(text())='TestUser']"); // Before method in Roles page
     }
@@ -54,7 +63,7 @@ class UsersPage extends Page {
         return $("select[name='type'] option[value='1']");
     }
     get extensionSip () {
-        return $("(//div[@class='css-19bb58m'])[1]");
+        return $("(//div[@class=' css-19bb58m'])[1]");
     }
     get extensionValueSip () {
         return $("span[child-key='112']");
@@ -69,17 +78,17 @@ class UsersPage extends Page {
         return $("//select[@name='role_id']/option[normalize-space(text())='Default Manager']"); // Default Manager
     }
     // Additional field when the manager is selected 
-    get extQueues () {
-        return $("(//div[@class='css-19bb58m'])[2]");
+    get extGroups () {
+        return $("(//div[@class=' css-1wy0on6'])[2]");
     }
-    get extQueuesSelect () {
-        return $("div[class='css-d7l1ni-option']");
+    get extGroupsSelect () {
+        return $("div[class=' css-d7l1ni-option']");
     }
     get monitorQueues () {
-        return $("(//div[@class='css-19bb58m'])[3]");
+        return $("(//div[@class=' css-1wy0on6'])[3]");
     }
     get monitorQueuesSelect () {
-        return $("div[class='css-d7l1ni-option']");
+        return $("div[class=' css-d7l1ni-option']");
     }
 
     // Getters for Create User Agent - WEB
@@ -99,7 +108,7 @@ class UsersPage extends Page {
         return $("select[name='type'] option[value='0']");
     }
     get extension () {
-        return $("div[class='css-19bb58m']");
+        return $("div[class=' css-19bb58m']");
     }
     get extensionValueWeb () {
         return $("span[child-key='111']");
@@ -184,7 +193,7 @@ class UsersPage extends Page {
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.extension.click()
         await browser.pause(300); // Pause for 0,3 seconds to observe
-        await this.extensionValueWeb.click()
+        await this.extensionValueRoles.click()
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.levelBefore.click()
         await browser.pause(300); // Pause for 0,3 seconds to observe
@@ -194,7 +203,7 @@ class UsersPage extends Page {
         await browser.execute((el) => el.click(), await this.createBtn);
     }
 
-    async createUserAdminWEB (name, email, phone) { 
+    async createUserBeforeN (name, email, phone) { 
         await this.newUser.click();
         await browser.pause(500); // Pause for 0,5 seconds to observe
         await this.userName.setValue(name);
@@ -209,18 +218,45 @@ class UsersPage extends Page {
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.extension.click()
         await browser.pause(300); // Pause for 0,3 seconds to observe
+        await this.extensionValueRolesN.click()
+        await browser.pause(300); // Pause for 0,3 seconds to observe
+        await this.levelBefore.click()
+        await browser.pause(300); // Pause for 0,3 seconds to observe
+        await this.roleBeforeN.click()
+        await browser.pause(500); // Pause for 0,5 seconds to observe
+        await this.createBtn.moveTo();
+        await browser.execute((el) => el.click(), await this.createBtn);
+    }
+    
+    async createUserAdminWEB (name, email, phone) { 
+        await this.newUser.click();
+        await browser.pause(500); // Pause for 0,5 seconds to observe
+        await this.userName.setValue(name);
+        await browser.pause(300); // Pause for 0,3 seconds to observe
+        await this.userEmail.setValue(email);
+        await browser.pause(300); // Pause for 0,3 seconds to observe
+        await this.userPhone.setValue(phone);
+        await browser.pause(300); // Pause for 0,3 seconds to observe
+        await this.activeToggle.click();
+        await browser.pause(300); // Pause for 0,3 seconds to observe
+        await this.extTypeWeb.click()
+        await browser.pause(300); // Pause for 0,3 seconds to observe
+        await browser.pause(30000);
+        await this.extension.click()
+        await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.extensionValueWeb.click()
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.levelAdmin.click()
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.roleAdmin.click()
         await browser.pause(500); // Pause for 0,5 seconds to observe
-        await this.createBtn.doubleClick();
-        //await browser.execute((el) => el.click(), await this.createBtn);
+        //await this.createBtn.doubleClick();
+        await browser.execute((el) => el.click(), await this.createBtn);
+        await browser.pause(4000); // Pause for 4 seconds to observe
     }
 
     async searchUser (search) {
-        await browser.refresh();
+        //await browser.refresh();
         await this.searchBar.setValue(search);
     }
 
@@ -253,16 +289,22 @@ class UsersPage extends Page {
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.roleManager.click()
         await browser.pause(300); // Pause for 0,3 seconds to observe
-        await this.extQueues.click()
+        await this.extGroups.click()
         await browser.pause(300); // Pause for 0,3 seconds to observe
-        await this.extQueuesSelect.click()
+        await this.extGroupsSelect.click()
+        await browser.pause(300); // Pause for 0,3 seconds to observe
+        // Scroll is used because of a div class <div class='sticky bottom-0 w-full z-20 p-2'> 
+        await browser.execute(() => {
+            window.scrollTo(0, document.body.scrollHeight); // Scroll to the very bottom of the page
+        });
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.monitorQueues.click()
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.monitorQueuesSelect.click()
         await browser.pause(500); // Pause for 0,5 seconds to observe
-        await this.createBtn.doubleClick();
-        //await browser.execute((el) => el.click(), await this.createBtn);;
+        //await this.createBtn.doubleClick();
+        await browser.execute((el) => el.click(), await this.createBtn);
+        await browser.pause(4000); // Pause for 4 seconds to observe
     }
 
 

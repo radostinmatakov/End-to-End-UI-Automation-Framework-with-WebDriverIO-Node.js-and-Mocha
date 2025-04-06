@@ -3,7 +3,7 @@ exports.config = {
     runner: 'local',
 
     specs: [
-        '../../specs/Positive tests/test.statuses.js'
+        '../../specs/Positive_tests/Sideview_menu/test.statuses.js'
     ],
 
     capabilities: [  

@@ -1,5 +1,6 @@
 const { $, $$ } = require('@wdio/globals')
-const Page = require('../page');
+const Page = require('../../../page');
+const Locators = require('../../../../helpers/locators.js')
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -8,7 +9,7 @@ class QueuesPage extends Page {
     // Define selectors using getter methods
     // Getter for method waitForPageLoad
     get table () {
-        return $("div[class='panel']");
+        return $("svg[class='lucide lucide-trash2']");
     }
 
     // Getter for scroll into View
@@ -18,8 +19,8 @@ class QueuesPage extends Page {
     
     // Getters for Create Queues
     // General tab
-    get createBtn () {
-        return $('a[class="btn btn-outline-primary ltr:ml-auto mr-10"]');
+    get addQueue () {
+        return $("//button[contains(@class, 'btn') and text()='+ Add Queue']");
     }
     get generalTab () {
         return $('(//button[@role="tab"])[1]');
@@ -31,97 +32,98 @@ class QueuesPage extends Page {
         return $('input[name="id"]');
     }
     get callsDistrubution () {
-        return $('(//div[@class=" input-group"])[3]');
+        return $('(//div[@class="css-19bb58m"])[1]');
     }
     get callsDistrubutionValue () {
         return $('span[child-key="ringall"]');
     }
     get maxWaitTime () {
-        return $('(//div[@class=" input-group"])[4]');
+        return $('(//div[@class="css-19bb58m"])[2]');
     }
     get maxWaitTimeValue () {
         return $('span[child-key="1"]');
     }
     get agentTimeout () {
-        return $('(//div[@class=" input-group"])[5]');
+        return $('(//div[@class="css-19bb58m"])[3]');
     }
     get agentTimeoutValue () {
         return $('span[child-key="0"]');
     }
     get retryTime () {
-        return $('(//div[@class=" input-group"])[6]');
+        return $('(//div[@class="css-19bb58m"])[4]');
     }
     get retryTimeValue () {
         return $('span[child-key="none"]');
     }
     get autoFill () {
-        return $('(//div[@class=" input-group"])[7]');
+        return $('(//div[@class="css-19bb58m"])[5]');
     }
     get autoFillValue () {
         return $('span[child-key="yes"]');
     }
     get destinationNoPickUp () {
-        return $('(//div[@class=" input-group"])[8]');
+        return $('(//div[@class="css-19bb58m"])[6]');
     }
     get destinationNoPickUpValue () {
         return $('span[child-key="macro-hangupcall"]');
     }
     get destinationNoPickUpTwo () {
-        return $('(//div[@class=" input-group"])[9]');
+        return $('(//div[@class="css-19bb58m"])[7]');
     }
     get destinationNoPickUpTwoValue () {
-        return $('span[child-key="s"]');
-    }
-    get musicOnHold () {
-        return $('(//div[@class=" input-group"])[10]');
+        return $('span[child-key="hangup"]');
     }
     get musicOnHoldValue () {
         return $('span[child-key="Alien"]');
     }
+    /*
     get closePlayer () {
         return $('svg[class="lucide lucide-x m-2 cursor-pointer"]');
     }
+    */
 
     // Agents tab
     get agentTab () {
         return $('button[role="tab"]:nth-of-type(2)');
     }
     get addExt () {
-        return $('div[class="user-profile"]');
+        return $('svg[class="lucide lucide-plus shrink-0  undefined"]');
     }
     get searchBarAllExt () {
         return $('(//input[@placeholder="Filter Extensions"])[1]');
     }
 
     // Getters for Edit Queue
-    get edit () {
-        return $('svg[class="lucide lucide-pencil"]');
+    // General tab
+    get opneEditSideview () {
+        return $('tr[class="m_4e7aa4fd mantine-Table-tr mantine-datatable-row"]');
     }
-
-    //General tab
     get nameEdit () {
         return $('input[name="name"]');
     }
     get callsDistrubutionEdit () {
-        return $('(//div[@class=" input-group"])[3]');
+        return $('(//div[@class="css-19bb58m"])[1]');
     }
     get callsDistrubutionValueEdit () {
         return $('span[child-key="linear"]');
     }
     get maxWaitTimeEdit () {
-        return $('(//div[@class=" input-group"])[4]');
+        return $('(//div[@class="css-19bb58m"])[2]');
     }
     get maxWaitTimeValueEdit () {
         return $('span[child-key="12"]');
     }
     get agentTimeoutEdit () {
-        return $('(//div[@class=" input-group"])[5]');
+        return $('(//div[@class="css-19bb58m"])[3]');
     }
     get agentTimeoutValueEdit () {
         return $('span[child-key="9"]');
     }
     get removeMusicOnHold () {
-        return $('svg[class="lucide lucide-delete m-2 mt-4 cursor-pointer"]');
+        return $('svg[class="lucide lucide-circle-x cursor-pointer text-gray-500 hover:text-red-500"]');
+    }
+    get musicOnHold () {
+        return $('(//div[@class="css-19bb58m"])[8]');
     }
     get musicOnHoldEditValue () {
         return $('span[child-key="Blue_Birds"]');
@@ -132,19 +134,19 @@ class QueuesPage extends Page {
         return $('button[role="tab"]:nth-of-type(3)');
     }
     get agentTimeoutRestart () {
-        return $('(//div[@class=" input-group"])[1]');
+        return $('(//div[@class="css-19bb58m"])[1]');
     }
     get agentTimeoutRestartValue () {
         return $('span[child-key="yes"]');
     }
     get wrapupTime () {
-        return $('(//div[@class=" input-group"])[2]');
+        return $('(//div[@class="css-19bb58m"])[2]');
     }
     get wrapupTimeValue () {
         return $('span[child-key="1"]');
     }
     get skipBusyAgents () {
-        return $('(//div[@class=" input-group"])[3]');
+        return $('(//div[@class="css-19bb58m"])[3]');
     }
     get skipBusyAgentsValue () {
         return $('span[child-key="3"]');
@@ -189,19 +191,28 @@ class QueuesPage extends Page {
     }
 
     // Reusible getters for all 
+    get createBtn () {
+        return $("//button[contains(@class, 'btn') and text()='Create']");
+    }
     get saveBtn () {
-        return $('button[class="btn btn-outline-primary "]');
+        return $("//button[contains(@class, 'btn') and text()='Save']");
     }
     get searchBar () {
-        return $('(//input[@placeholder="Search..."])[2]');
+        return $('input[placeholder="Search..."]');
     }
     get disableEnableConfirm () {
         return $('button[class="btn btn-primary btn-confirm ltr:ml-4 rtl:mr-4"]');
     }
+    get closeSwal2 () {
+        return $("button[class='swal2-close']");
+    }
+    get notifyMessage() {
+        return $('#swal2-title');
+    }
 
     // Getters for inner assettions 
     get agentElement() {
-        return $$('div.mt-4');
+        return $$("(//div[contains(@class, 'p-4')])[2]//div[contains(@class, 'p-3') and contains(@class, 'font-semibold')]");
     }
 
     // Async methods to wait until a specific element on the page is visible or present
@@ -212,8 +223,8 @@ class QueuesPage extends Page {
     }
    
    // Async methods to encapsule automation code to interact with the page
-    async createQueue (name, number) {
-        await this.createBtn.click();
+    async createQueue (name, number, agent) {
+        await this.addQueue.click();
         await browser.pause(500); // Pause for 0,5 seconds to observe
         // General tab
         await this.generalTab.click();
@@ -246,7 +257,8 @@ class QueuesPage extends Page {
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.destinationNoPickUpValue.click();
         await browser.pause(300); // Pause for 0,3 seconds to observe
-        await this.destinationNoPickUpTwo.click();
+        await this.destinationNoPickUpTwo.scrollIntoView();
+        await this.destinationNoPickUpTwo.click();                  // в момента, понеже има бъг не го намира 19.12 (БЪГ - като цъкнеш в полето за Teminate call системата го отчита все едно е празно и затова не намира локаторите, което пак е бъг)
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.destinationNoPickUpTwoValue.click();
         await browser.pause(300); // Pause for 0,3 seconds to observe
@@ -279,23 +291,18 @@ class QueuesPage extends Page {
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.addExt.click();
         await browser.pause(300); // Pause for 0,3 seconds to observe
-        await this.searchBarAllExt.click();
+        await this.searchBarAllExt.setValue(agent);
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.addExt.click();
         await browser.pause(500); // Pause for 0,5 seconds to observe
-        await this.saveBtn.waitForClickable();
-        await this.saveBtn.click();
-    }
-
-    async searchCreatedQueue (search) {
-        await this.searchBar.setValue(search);
-        await browser.pause(500); // Pause for 0,5 seconds to observe
+        await this.createBtn.waitForClickable();
+        await this.createBtn.click();
     }
 
     async editQueue (search, name_edit) {
         await this.searchBar.setValue(search);
         await browser.pause(300); // Pause for 0,3 seconds to observe
-        await this.edit.click();
+        await this.opneEditSideview.click();
         await browser.pause(500); // Pause for 0,5 seconds to observe
         // General tab
         await this.nameEdit.click(); // Focus the input
@@ -316,7 +323,8 @@ class QueuesPage extends Page {
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.agentTimeoutValueEdit.click();
         await browser.pause(300); // Pause for 0,3 seconds to observe
-        await this.removeMusicOnHold.click();
+        await this.removeMusicOnHold.scrollIntoView();
+        await this.removeMusicOnHold.click();                        
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.musicOnHold.click();
         await browser.pause(300); // Pause for 0,3 seconds to observe
@@ -379,6 +387,7 @@ class QueuesPage extends Page {
         const activeToggle = await this.announceToggle;
         await browser.execute((el) => el.click(), activeToggle);
         await browser.pause(300); // Pause for 0,3 seconds to observe
+        await this.announceQueue.scrollIntoView();
         await this.announceQueue.click();
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.announceQueueValue.click();
@@ -388,11 +397,6 @@ class QueuesPage extends Page {
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.saveBtn.waitForClickable();
         await this.saveBtn.click();
-    }
-
-    async searchEditedQueue (search) {
-        await this.searchBar.setValue(search);
-        await browser.pause(500); // Pause for 0,5 seconds to observe
     }
 
     async copyQueue (search, name_copy, number) {
@@ -406,6 +410,7 @@ class QueuesPage extends Page {
         await browser.keys('Backspace'); // Clear the selected text
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.nameCopy.setValue(name_copy);
+        await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.number.setValue(number);
         // Agent tab
         const headerHeight = await this.header.getSize('height');
@@ -431,16 +436,22 @@ class QueuesPage extends Page {
         for (const element of agentElements) {
             await expect(element).toBeDisplayed(); // Assert each element is visible
         }
-        await this.saveBtn.waitForClickable();
-        await this.saveBtn.click();
+        await this.createBtn.waitForClickable();
+        await this.createBtn.click();
     }
 
-    async searchCopiedQueue (search) {
+    async searchQueue (search) {
         await this.searchBar.setValue(search);
         await browser.pause(500); // Pause for 0,5 seconds to observe
     }
 
-    async disableQueue (search, searchTwo) {
+    async clearSearch () {
+        await this.searchBar.click(); // Focus the input
+        await browser.keys(['Control', 'a']); // Select all text
+        await browser.keys('Backspace'); // Clear the selected text
+    }
+
+    async disableQueue (search) {
         await this.searchBar.setValue(search);
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.disable.click();
@@ -462,6 +473,36 @@ class QueuesPage extends Page {
         await this.delete.click();
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.deleteConfirm.click();
+    }
+
+    
+
+    async closeNotification () {
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
+        await this.closeSwal2.click(); 
+    }
+
+    // Used in before hooks
+    async disableDeleteQueue (search, message) {
+        await this.searchBar.setValue(search);
+        await this.disable.click();
+        await this.disableEnableConfirm.click();
+        await this.notifyMessage.waitForDisplayed();
+        await expect(this.notifyMessage).toHaveText(expect.stringContaining(message));
+        await this.delete.click();
+        await this.deleteConfirm.click();
+    }
+    async isQueuePresent(queueNum) {
+        const noDataElem = await $("//div[contains(@class, 'mantine-Text-root') and text()='No data available']");
+        const isNoDataDisplayed = await noDataElem.isDisplayed().catch(() => false);
+        return !isNoDataDisplayed;  // If the "No data available" message is not displayed, queue exists
     }
 
     // Overwrite specific options to adapt it to page object

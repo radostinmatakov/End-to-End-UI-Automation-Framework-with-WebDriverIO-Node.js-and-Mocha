@@ -1,7 +1,7 @@
-const LoginPageAdmin = require('../../pageobjects_main/login.page.admin.js')
+const LoginPageAdmin = require('../../../../pageobjects_main/login.page.admin.js')
 const QueuesPage = require('../../pageobjects_main/pageobjects/queues.page')
-const AssertionsQueues = require('../../helpers/assertions.queues')
-const TestConfig = require('../../data/TestConfig');
+const AssertionsQueues = require('../../../../helpers/assertions.queues.js')
+const TestConfig = require('../../../../data/TestConfig.js');
 
 describe('Login in Axiom as admin', () => {
     it('Succsesfully login with valid credentials', async () => {
@@ -14,7 +14,7 @@ describe('Create, Edit, Copy, Disable/Enable, Delete Queues', () => {
     it('Create Queues successfully.\nA pop-up message for update should be displayed after creating the Queues.', async () => {
         await QueuesPage.open()
         await QueuesPage.waitForPageLoad()
-        await QueuesPage.createQueue(global.queuesName, TestConfig.queuesNum) 
+        await QueuesPage.createQueue(global.queuesName, TestConfig.queuesNum, TestConfig.searchAgent) 
         await AssertionsQueues.assertSuccessMessage(TestConfig.successMsgQ)
     })
 

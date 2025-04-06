@@ -3,19 +3,25 @@ const assert = require('assert');
 /**
  * sub page containing specific selectors and methods for assertions
  */
-class AssertionsQueues {
+class AssertionsMesQueues {
     // Getters for Assertions
     get queueNumber() {
-        return $('//a[normalize-space()="9998"]');
+        return $('//td[normalize-space()="9998"]');
     }
     get queueNumberCopy() {
-        return $('//a[normalize-space()="9997"]');
+        return $('//td[normalize-space()="9997"]');
     }
     get queueName() {
         return $("(//td[@class='m_4e7aa4ef mantine-Table-td mantine-datatable-pointer-cursor'])[2]");
     }
     get emptyTable() {
+        return $("(//div[@class='mantine-focus-auto m_b6d8b162 mantine-Text-root'])[1]");
+    }
+    get emptyTableTwo() {
         return $("(//div[@class='mantine-focus-auto m_b6d8b162 mantine-Text-root'])[2]");
+    }
+    get emptyTableIcon() {
+        return $("div[class='mantine-datatable-empty-state-icon']");
     }
     get disabledTableRow() {
         return $('tr.m_4e7aa4fd.mantine-Table-tr.mantine-datatable-row.disabled');
@@ -27,11 +33,17 @@ class AssertionsQueues {
         return $('#swal2-title');
     }
 
-
     // Assertions methods to encapsule automation code to interact with the page
     // Message assertion 
     async waitForSuccessMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertSuccessMessage(message) {
         await this.waitForSuccessMessage();
@@ -39,7 +51,14 @@ class AssertionsQueues {
     }
 
     async waitForUpdateMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertUpdateMessage(message) {
         await this.waitForUpdateMessage();
@@ -47,7 +66,14 @@ class AssertionsQueues {
     }
 
     async waitForDissableMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertDissableMessage(message) {
         await this.waitForDissableMessage();
@@ -55,7 +81,14 @@ class AssertionsQueues {
     }
 
     async waitForEnableMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertEnableMessage(message) {
         await this.waitForEnableMessage();
@@ -63,15 +96,22 @@ class AssertionsQueues {
     }
 
     async waitForDeleteMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertDeleteMessage(message) {
         await this.waitForDeleteMessage();
         await expect(this.notifyMessage).toHaveText(expect.stringContaining(message));
     }
 
-
-    // Text assertion 
+    // Text assertion in table
+    // Number
     async waitForCreatedQueueNumber() {
         await this.queueNumber.waitForDisplayed();
     }
@@ -80,7 +120,6 @@ class AssertionsQueues {
         const actualText = await this.queueNumber.getText();
         assert.ok(actualText.includes(expectedText), `Expected "${expectedText}" to be in "${actualText}"`);
     }
-
     async waitForCopiedQueueNumber() {
         await this.queueNumberCopy.waitForDisplayed();
     }
@@ -90,6 +129,7 @@ class AssertionsQueues {
         assert.ok(actualText.includes(expectedText), `Expected "${expectedText}" to be in "${actualText}"`);
     }
 
+    // Name
     async waitForCreatedQueuesName() {
         await this.queueName.waitForDisplayed();
     }
@@ -98,7 +138,6 @@ class AssertionsQueues {
         const actualText = await this.queueName.getText();
         assert.ok(actualText.includes(global.queuesName), `Expected "${global.queuesName}" to be in "${actualText}"`);
     }
-
     async waitForEditedQueuesName() {
         await this.queueName.waitForDisplayed();
     }
@@ -107,7 +146,6 @@ class AssertionsQueues {
         const actualText = await this.queueName.getText();
         assert.ok(actualText.includes(global.editQueuesName), `Expected "${global.editQueuesName}" to be in "${actualText}"`);
     }
-
     async waitForCopiedQueuesName() {
         await this.queueName.waitForDisplayed();
     }
@@ -117,6 +155,9 @@ class AssertionsQueues {
         assert.ok(actualText.includes(global.copyQueuesName), `Expected "${global.copyQueuesName}" to be in "${actualText}"`);
     }
 
+    // TO ADD ATRIBUTES
+
+    // Empty table attributes
     async waitForEmptyTable() {
         await browser.waitUntil(
             async () => {
@@ -134,7 +175,20 @@ class AssertionsQueues {
         const messageText = await this.emptyTable.getText();
         expect(messageText).toContain(expectedMessage);
     }
+    async assertEmptyTableTwo(expectedMessage) {
+        await this.waitForEmptyTable(); 
+        const messageText = await this.emptyTableTwo.getText();
+        expect(messageText).toContain(expectedMessage);
+    }
+    async assertEmptyTableIcon() {
+        await this.waitForEmptyTable(); 
+        const isDisplayed = await this.emptyTableIcon.isDisplayed();
+        expect(isDisplayed).toBe(true);
+    }
+    // Text assertions of the Sideview
+    // TO DO 
 
+    // Assertions of the DOM 
     async assertTableRowIsDisabled() {
         await this.disabledTableRow.waitForDisplayed({ timeout: 5000 });
         const isDisabled = await this.disabledTableRow.getAttribute('class');
@@ -147,4 +201,4 @@ class AssertionsQueues {
     }
 }
 
-module.exports = new AssertionsQueues();
+module.exports = new AssertionsMesQueues();

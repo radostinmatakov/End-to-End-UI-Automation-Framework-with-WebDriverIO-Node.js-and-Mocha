@@ -3,7 +3,7 @@ exports.config = {
     runner: 'local',
 
     specs: [
-        '../../specs/Positive tests/test.users.js'
+        '../../specs/Positive_tests/Sideview_menu/test.users.js'
     ],
 
     capabilities: [  
@@ -50,6 +50,7 @@ exports.config = {
         global.usersNameSip = NameGenerator.generateRandomUserNameSip(); 
         global.usersEmailSip = NameGenerator.generateRandomUserEmailSip();
         global.usersPass = NameGenerator.generateRandomUserPassword();
+        global.usersEmailExt = NameGenerator.generateRandomUserEmailExt(); 
         // Generate the edited user's name
         global.editUsersNameWeb = `${global.usersNameWeb}EditWeb`;    
         global.editUsersNameSip = `${global.usersNameSip}EditSip`;

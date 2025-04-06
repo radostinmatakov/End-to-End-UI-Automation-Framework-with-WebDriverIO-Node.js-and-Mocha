@@ -25,40 +25,67 @@ class AssertionsStatus {
     get notifyMessage() {
         return $('#swal2-title');
     }
-    get disabledTableRow() {
-        return $('tr.m_4e7aa4fd.mantine-Table-tr.mantine-datatable-row.disabled');
-    }
-    get enabledTableRow() {
-        return $('tr.m_4e7aa4fd.mantine-Table-tr.mantine-datatable-row');
-    }
     get emptyTable() {
+        return $("(//div[@class='mantine-focus-auto m_b6d8b162 mantine-Text-root'])[1]");
+    }
+    get emptyTableTwo() {
         return $("(//div[@class='mantine-focus-auto m_b6d8b162 mantine-Text-root'])[2]");
     }
-
+    get emptyTableIcon() {
+        return $("div[class='mantine-datatable-empty-state-icon']");
+    }
+    get headerMenuDropDown () {
+        return $("(//span[contains(@class,'font-semibold')][normalize-space()='Available'])[1]");
+    }
+    get headerMenu () {
+        return $(`//ul[contains(@class, "!px-2")]//*[text()='${global.statusName}']`);
+    }
+    
+    
     //Quick View 
     get quickView() {
-        return $("div[class='m_5df29311 text-sm mantine-Drawer-body']");
+        return $("div[class='justify-between border-b border-gray-200 pb-2 px-4']");
     }
-
 
     // Assertions methods to encapsule automation code to interact with the page
     // Message assertion 
     async waitForSuccessMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertSuccessMessage(message) {
         await this.waitForSuccessMessage();
         await expect(this.notifyMessage).toHaveText(expect.stringContaining(message));
     }
     async waitForUpdateMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertUpdateMessage(message) {
         await this.waitForUpdateMessage();
         await expect(this.notifyMessage).toHaveText(expect.stringContaining(message));
     }
     async waitForDeleteMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertDeleteMessage(message) {
         await this.waitForDeleteMessage();
@@ -100,68 +127,25 @@ class AssertionsStatus {
         assert(isDisplayed, 'SVG icon is not visible');
     }
 
-    async waitForQuickView() {
-        await this.quickView.waitForDisplayed();
+    async waitForCreatedStatusInHeader() {
+        await this.headerMenu .waitForDisplayed();
     }
-    async assertCreateStatusQucikViewAtributes() {
-        await this.waitForQuickView();
-        // For Name
-        const name = await this.quickView.$(`//p[contains(text(), "${global.statusName}")]`); 
-        const actualName = await name.getText();
-        assert.strictEqual(actualName, global.statusName, 'Expected "Name" text is not present');
-        // For "Status"
-        const status = await this.quickView.$("p[class='text-white-dark'] span[class='badge badge-outline-success']"); 
-        const actualStatus = await status.getText();
-        assert.strictEqual(actualStatus, 'Active', 'Expected "Status" text is not present'); 
-        // For "Call Permissions"
-        const extType = await this.quickView.$("//p[normalize-space()='Disabled']"); 
-        const actualExtType = await extType.getText();
-        assert.strictEqual(actualExtType, 'Disabled', 'Expected "Extension Type" text is not present');
-        // For "Icon name"
-        const icon = await this.quickView.$("//p[contains(text(), 'AArrowDown')]"); 
-        const actualIcon = await icon.getText();
-        assert.strictEqual(actualIcon, 'AArrowDown', 'Expected "Extension" text is not present'); 
-        // For "Type"
-        const type = await this.quickView.$("//p[contains(text(), 'PAUSE')]"); 
-        const actualType = await type.getText();
-        assert.strictEqual(actualType, 'PAUSE', 'Expected "Extension" text is not present');   
-    }
-    async assertEditedStatusQucikViewAtributes() {
-        await this.waitForQuickView();
-        // For Name
-        const name = await this.quickView.$(`//p[contains(text(), "${global.editStatusName}")]`); 
-        const actualName = await name.getText();
-        assert.strictEqual(actualName, global.editStatusName, 'Expected "Name" text is not present');
-        // For "Status"
-        const status = await this.quickView.$("p[class='text-white-dark'] span[class='badge badge-outline-warning']"); 
-        const actualStatus = await status.getText();
-        assert.strictEqual(actualStatus, 'Inactive', 'Expected "Status" text is not present'); 
-        // For "Call Permissions"
-        const extType = await this.quickView.$("//p[normalize-space()='Inbound and Outbound']"); 
-        const actualExtType = await extType.getText();
-        assert.strictEqual(actualExtType, 'Inbound and Outbound', 'Expected "Extension Type" text is not present');
-        // For "Icon name"
-        const icon = await this.quickView.$("//p[contains(text(), 'AirVent')]"); 
-        const actualIcon = await icon.getText();
-        assert.strictEqual(actualIcon, 'AirVent', 'Expected "Extension" text is not present'); 
-        // For "Type"
-        const type = await this.quickView.$("//p[contains(text(), 'WORK')]"); 
-        const actualType = await type.getText();
-        assert.strictEqual(actualType, 'WORK', 'Expected "Extension" text is not present');   
+    async assertCreatedStatusTextInHeader() {
+        await this.waitForCreatedStatusInHeader();
+        const actualText   = await this.headerMenu.getText();
+        expect(actualText).toBe(global.statusName), `Expected: "${global.statusName}", but got: "${actualText}"`;
+        console.log(`Expected: ${global.statusName}, Actual: ${actualText}`); 
     }
 
-    async assertTableRowIsDisabled() {
-        await this.disabledTableRow.waitForDisplayed({ timeout: 5000 });
-        const isDisabled = await this.disabledTableRow.getAttribute('class');
-        expect(isDisabled).toContain('disabled');
-            console.log('Inactive row:', isDisabled)
+    async waitForDeletedStatusIsNotInHeader() {
+        await this.headerMenuDropDown .waitForDisplayed();
     }
-
-    async assertTableRowIsEnabled() {
-        await this.enabledTableRow.waitForDisplayed({ timeout: 5000 });
-        await expect(this.enabledTableRow).not.toHaveElementClass(expect.stringContaining('disabled'));
+    async assertDeletedStatusTextIsNotInHeader() {
+        await this.waitForDeletedStatusIsNotInHeader();
+        const actualText   = await this.headerMenu.isExisting();
+        expect(actualText).toBe(false, `The status "${global.editStatusName}" is still present after deletion!`);
+      
     }
-
 
     async waitForEmptyTable() {
         await browser.waitUntil(
@@ -175,10 +159,20 @@ class AssertionsStatus {
             }
         );
     }
-    async assertEmptyTable(expectedMessage) {
+     async assertEmptyTable(expectedMessage) {
         await this.waitForEmptyTable(); 
         const messageText = await this.emptyTable.getText();
         expect(messageText).toContain(expectedMessage);
+    }
+    async assertEmptyTableTwo(expectedMessage) {
+        await this.waitForEmptyTable(); 
+        const messageText = await this.emptyTableTwo.getText();
+        expect(messageText).toContain(expectedMessage);
+    }
+    async assertEmptyTableIcon() {
+        await this.waitForEmptyTable(); 
+        const isDisplayed = await this.emptyTableIcon.isDisplayed();
+        expect(isDisplayed).toBe(true);
     }
 }
 

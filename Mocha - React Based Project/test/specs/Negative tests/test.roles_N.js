@@ -27,15 +27,15 @@ describe('Negative Scenarios for Create, Edit Roles', () => {
             'Dial pad',
             'Dashboard'
         ];
-        console.log("User Name:", global.usersNameWeb);
-        console.log("User Email:", global.usersEmailWeb);
+        console.log("User Name:", global.usersNameRolesN);
+        console.log("User Email:", global.usersEmailRolesN);
         await RolesPage.open();
         await RolesPage.waitForPageLoad();
-        await RolesPage.createRoleForUser(TestConfig.roleNameBefore, expectedTextsMan)
-        await AssertionsRoles.assertSuccessMessage(TestConfig.succsessMsgR)
+        await RolesPage.createRoleForUser(TestConfig_N.roleNameBeforeN, expectedTextsMan)
+        await AssertionsRoles.assertSuccessMessage(TestConfig.successMsgR)
         await UsersPage.open()
         await UsersPage.waitForPageLoad()
-        await UsersPage.createUserBefore(global.usersNameWeb,global.usersEmailWeb,TestConfig.userPhone)
+        await UsersPage.createUserBeforeN(global.usersNameRolesN,global.usersEmailRolesN,TestConfig.userPhone)
     });
 
     it('Verify that the user cannot create a Role with missing mandatory fields.', async () => {
@@ -47,25 +47,25 @@ describe('Negative Scenarios for Create, Edit Roles', () => {
     it('Verify that the user cannot create a Role with already existing Name.', async () => {
         await RolesPageN.open()
         await RolesPageN.waitForPageLoad()
-        await RolesPageN.createRoleWithExistingName(TestConfig.roleNameBefore) 
+        await RolesPageN.createRoleWithExistingName(TestConfig_N.roleNameBeforeN) 
         await AssertionsRolesN.assertErrorMessage(TestConfig_N.errorMsgR)
     })
 
     it('Verify that the user cannot delete an asigned Role to a User.', async () => {
         await RolesPageN.open()
         await RolesPageN.waitForPageLoad()
-        await RolesPageN.deleteRoleWhenAssigned_N(TestConfig.roleNameBefore) 
+        await RolesPageN.deleteRoleWhenAssigned_N(TestConfig_N.roleNameBeforeN) 
     })
 
     after(async () => {
         await RolesPageN.open()
         await RolesPageN.waitForPageLoad()
-        await RolesPageN.deleteRole_N(TestConfig.roleNameBefore, TestConfig.assignMsg) 
+        await RolesPageN.deleteRole_N(TestConfig_N.roleNameBeforeN, TestConfig.assignMsg) 
         await AssertionsRoles.assertUpdateMessage(TestConfig.deleteMsgR)
         await AssertionsRoles.assertEmptyTable(TestConfig.emptyTable)
         await UsersPage.open()
         await UsersPage.waitForPageLoad()
-        await UsersPage.deleteUser(global.usersNameWeb)
+        await UsersPage.deleteUser(global.usersNameRolesN)
         await AssertionsUsers.assertDeleteMessage(TestConfig.deleteMsgU)
         await AssertionsUsers.assertEmptyTable(TestConfig.emptyTable)
     });

@@ -35,13 +35,13 @@ class UsersPageN extends Page {
         return $("select[name='type'] option[value='1']");
     }
     get extension () {
-        return $("div[class='css-19bb58m']");
+        return $("div[class=' css-19bb58m']");
     }
     get extensionValueWeb () {
         return $("span[child-key='111']");
     }
     get extensionValueSip () {
-        return $("span[child-key='504']");
+        return $("span[child-key='113']");
     }
     get levelAdmin () {
         return $("select[name='level_id'] option[value='2']"); // Admin
@@ -80,7 +80,6 @@ class UsersPageN extends Page {
         return $("button[class='btn btn-outline-success ']");
     }
     
-
     // Getters for inner assertions
     get errorFields () {
         return $$("div[class='has-error input-group']"); // For All other fields
@@ -92,16 +91,16 @@ class UsersPageN extends Page {
         return $("(//div[@class='text-danger !mt-1'])[2]"); 
     }
     get errorTextExtType () {
-        return $("(//div[@class='text-danger mt-1'])[1]"); 
+        return $("(//div[@class='text-danger'])[1]"); 
     }
     get errorTextExtension () {
         return $("(//div[@class='text-danger mt-1'])[1]"); 
     }
     get errorTextLevel () {
-        return $("(//div[@class='text-danger mt-1'])[2]"); 
+        return $("(//div[@class='text-danger'])[2]"); 
     }
     get errorTextRole () {
-        return $("(//div[@class='text-danger mt-1'])[3]"); 
+        return $("(//div[@class='text-danger'])[3]"); 
     }
     get alertIcon () {
         return $$("svg.lucide-circle-alert.text-danger");
@@ -155,7 +154,7 @@ class UsersPageN extends Page {
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.pageClick.click()
         await browser.pause(500); // Pause for 0,5 seconds to observe
-        // Assertion: Check that the alert Icen is present in the 'Name' field and 'Email' field
+        // Assertion: Check that the alert Icon is present in the 'Name' field and 'Email' field
         const errorIcon = await this.alertIcon;  
             console.log('Alert icon displayed:', errorIcon.length); 
         for (const field of errorIcon) {
@@ -249,12 +248,12 @@ class UsersPageN extends Page {
         const errorTextName = await this.errorTextName;  
             console.log('"Name is required" fields under Name:', errorTextName)  
         await expect(errorTextName).toBeDisplayed(); 
-        await expect(errorTextName).toHaveText('The name is already exist');
+        await expect(errorTextName).toHaveText('The name already exists');
         // Assertion: Check that the error text is present under 'Email' field
         const errorTextEmail = await this.errorTextEmail;  
             console.log('"Email is required" fields under Email:', errorTextEmail)  
         await expect(errorTextEmail).toBeDisplayed(); 
-        await expect(errorTextEmail).toHaveText('The email address is already exist');
+        await expect(errorTextEmail).toHaveText('The email address already exists');
     }
 
     async deleteUser (search) { 

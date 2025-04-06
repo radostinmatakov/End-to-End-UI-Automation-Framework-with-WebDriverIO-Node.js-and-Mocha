@@ -24,7 +24,7 @@ class AssertionsUsers {
         return $("(//td[@class='m_4e7aa4ef mantine-Table-td mantine-datatable-pointer-cursor'])[6]");
     }
     get groupsSip() {
-        return $("//span[contains(text(), 'group1')]");
+        return $("//span[contains(text(), 'Group1')]");
     }
     get userPhone() {
         return $("(//td[@class='m_4e7aa4ef mantine-Table-td mantine-datatable-pointer-cursor'])[7]");
@@ -41,17 +41,27 @@ class AssertionsUsers {
     get notifyMessage() {
         return $('#swal2-title');
     }
-    get quickView() {
-        return $("div[class='py-4 text-gray-500 w-full']"); 
-    }
     get emptyTable() {
-        return $("(//div[@class='mantine-focus-auto m_b6d8b162 mantine-Text-root'])[2]");
+        return $("(//div[contains(@class, 'mantine-Text-root') and text()='No data available'])[2]");
+    }
+    get emptyTableTwo() {
+        return $("(//div[contains(@class, 'mantine-Text-root') and text()='No data available'])[1]");
+    }
+    get emptyTableIcon() {
+        return $("div[class='mantine-datatable-empty-state-icon']");
     }
     
     // Assertions methods to encapsule automation code to interact with the page
     // Message assertion 
     async waitForSuccessMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertSuccessMessage(expectedMessage) {
         await this.waitForSuccessMessage();
@@ -65,21 +75,42 @@ class AssertionsUsers {
         expect(normalizedMessage).toContain(normalizedExpectedMessage);
     }
     async waitForUpdateMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertUpdateMessage(message) {
         await this.waitForUpdateMessage();
         await expect(this.notifyMessage).toHaveText(expect.stringContaining(message));
     }
     async waitForDeleteMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertDeleteMessage(message) {
         await this.waitForDeleteMessage();
         await expect(this.notifyMessage).toHaveText(expect.stringContaining(message));
     }
     async waitForResetMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertResetMessage(message) {
         await this.waitForResetMessage();
@@ -90,49 +121,49 @@ class AssertionsUsers {
     async waitForCreatedUsers() {
         await this.userName.waitForDisplayed();
     }
-    async assertCreatedWebUserAttributesText(expectedExt, expectedExtType, expectedStatus, expectedGroups, expectedPhone, expectedLevel, expectedRole) {
+    async assertCreatedWebUserAttributesText(expectedNumber) {
         await this.waitForCreatedUsers();
         const actualName = await this.userName.getText();
         assert.ok(actualName.includes(global.usersNameWeb), `Expected "${global.usersNameWeb}" to be in "${actualName}"`);
         const actualExt = await this.extension.getText();
-        assert.ok(actualExt.includes(expectedExt), `Expected "${expectedExt}" to be in "${actualExt}"`);
+        assert.ok(actualExt.includes(expectedNumber), `Expected "${expectedNumber}" to be in "${actualExt}"`);
         const actualExtType = await this.extType.getText();
-        assert.ok(actualExtType.includes(expectedExtType), `Expected "${expectedExtType}" to be in "${actualExtType}"`);
+        assert.strictEqual(actualExtType, 'Web', 'Expected Web Ext Type is not present');
         const actualStatus = await this.status.getText();
-        assert.ok(actualStatus.includes(expectedStatus), `Expected "${expectedStatus}" to be in "${actualStatus}"`);
+        assert.strictEqual(actualStatus, 'Active', 'Expected Web User status is not present');
         const actualEmail = await this.userEmail.getText();
         assert.ok(actualEmail.includes(global.usersEmailWeb), `Expected "${global.usersEmailWeb}" to be in "${actualEmail}"`);
         const actualGroups = await this.groupsWeb.getText();
-        assert.ok(actualGroups.includes(expectedGroups), `Expected "${expectedGroups}" to be in "${actualGroups}"`);
+        assert.strictEqual(actualGroups, 'All', 'Expected Web User Group is not present');
         const actualPhone = await this.userPhone.getText();
-        assert.ok(actualPhone.includes(expectedPhone), `Expected "${expectedPhone}" to be in "${actualPhone}"`);
+        assert.strictEqual(actualPhone, '359888777', 'Expected Web User Phone number is not present');
         const actualLevel = await this.level.getText();
-        assert.ok(actualLevel.includes(expectedLevel), `Expected "${expectedLevel}" to be in "${actualLevel}"`);
+        assert.strictEqual(actualLevel, 'Admin', 'Expected Web User Level is not present');
         const actualRole = await this.role.getText();
-        assert.ok(actualRole.includes(expectedRole), `Expected "${expectedRole}" to be in "${actualRole}"`);
+        assert.strictEqual(actualRole, 'Default Admin', 'Expected Web User Role is not present');
     }
-    async assertCreatedSipUserAttributesText(expectedExt, expectedExtType, expectedStatus, expectedGroups, expectedPhone, expectedLevel, expectedRole, expectedLogin) {
+    async assertCreatedSipUserAttributesText(expectedNumber) {
         await this.waitForCreatedUsers();
         const actualName = await this.userName.getText();
         assert.ok(actualName.includes(global.usersNameSip), `Expected "${global.usersNameSip}" to be in "${actualName}"`);
         const actualExt = await this.extension.getText();
-        assert.ok(actualExt.includes(expectedExt), `Expected "${expectedExt}" to be in "${actualExt}"`);
+        assert.ok(actualExt.includes(expectedNumber), `Expected "${expectedNumber}" to be in "${actualExt}"`);
         const actualExtType = await this.extType.getText();
-        assert.ok(actualExtType.includes(expectedExtType), `Expected "${expectedExtType}" to be in "${actualExtType}"`);
+        assert.strictEqual(actualExtType, 'Sip', 'Expected Sip Ext Type is not present');
         const actualStatus = await this.status.getText();
-        assert.ok(actualStatus.includes(expectedStatus), `Expected "${expectedStatus}" to be in "${actualStatus}"`);
+        assert.strictEqual(actualStatus, 'Active', 'Expected Sip User status is not present');
         const actualEmail = await this.userEmail.getText();
         assert.ok(actualEmail.includes(global.usersEmailSip), `Expected "${global.usersEmailSip}" to be in "${actualEmail}"`);
         const actualGroups = await this.groupsSip.getText();
-        assert.ok(actualGroups.includes(expectedGroups), `Expected "${expectedGroups}" to be in "${actualGroups}"`);
+        assert.strictEqual(actualGroups, 'Group1', 'Expected Sip User Group is not present');
         const actualPhone = await this.userPhone.getText();
-        assert.ok(actualPhone.includes(expectedPhone), `Expected "${expectedPhone}" to be in "${actualPhone}"`);
+        assert.strictEqual(actualPhone, '359888777', 'Expected Web User Phone number is not present');
         const actualLevel = await this.level.getText();
-        assert.ok(actualLevel.includes(expectedLevel), `Expected "${expectedLevel}" to be in "${actualLevel}"`);
+        assert.strictEqual(actualLevel, 'Manager', 'Expected Sip User Level is not present');
         const actualRole = await this.role.getText();
-        assert.ok(actualRole.includes(expectedRole), `Expected "${expectedRole}" to be in "${actualRole}"`);
-        const actualLogin = await this.forceLogin.getText();
-        assert.ok(actualLogin.includes(expectedLogin), `Expected "${expectedLogin}" to be in "${actualLogin}"`);
+        assert.strictEqual(actualRole, 'Default Manager', 'Expected Sip User Role is not present');
+        //const actualLogin = await this.forceLogin.getText();
+        //assert.strictEqual(actualLogin, 'Default Manager', 'Expected Sip User Login is not present');
     }
     async assertEditedWebUserAttributesText(expectedStatus) {
         await this.waitForCreatedUsers();
@@ -256,6 +287,16 @@ class AssertionsUsers {
         await this.waitForEmptyTable(); 
         const messageText = await this.emptyTable.getText();
         expect(messageText).toContain(expectedMessage);
+    }
+    async assertEmptyTableTwo(expectedMessage) {
+        await this.waitForEmptyTable(); 
+        const messageText = await this.emptyTableTwo.getText();
+        expect(messageText).toContain(expectedMessage);
+    }
+    async assertEmptyTableIcon() {
+        await this.waitForEmptyTable(); 
+        const isDisplayed = await this.emptyTableIcon.isDisplayed();
+        expect(isDisplayed).toBe(true);
     }
 }
 

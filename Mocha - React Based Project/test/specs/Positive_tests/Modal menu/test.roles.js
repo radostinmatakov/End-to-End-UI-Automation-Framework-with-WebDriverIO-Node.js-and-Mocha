@@ -1,9 +1,9 @@
-const LoginPageAdmin = require('../../pageobjects_main/login.page.admin.js')
+const LoginPageAdmin = require('../../../../pageobjects_main/login.page.admin.js')
 const RolesPage = require('../../pageobjects_main/pageobjects/roles.page')
 const UsersPage = require('../../pageobjects_main/pageobjects/users.page')
-const AssertionsRoles = require('../../helpers/assertions.roles')
-const AssertionsUsers = require('../../helpers/assertions.users')
-const TestConfig = require('../../data/TestConfig');
+const AssertionsRoles = require('../../../../helpers/assertions.roles.js')
+const AssertionsUsers = require('../../../../helpers/assertions.users.js')
+const TestConfig = require('../../../../data/TestConfig.js');
 
 describe('Login in Axiom as admin', () => {
     it('Succsesfully login with valid credentials', async () => {
@@ -20,20 +20,21 @@ describe('Create, Edit, Copy, Disable/Enable Permissions, Delete Roles', () => {
             'Settings',
             'Queues',
             'Reports',
-            'My Score',
+            //'My Score',
             'Dial pad',
-            'Dashboard'
+            'Dashboard',
+            'Messaging'
         ];
         // Log global variables to check special characters
-        console.log("User Name:", global.usersNameWeb);
-        console.log("User Email:", global.usersEmailWeb);
+        console.log("User Name:", global.usersNameRoles);
+        console.log("User Email:", global.usersEmailRoles);
         await RolesPage.open();
         await RolesPage.waitForPageLoad();
         await RolesPage.createRoleForUser(TestConfig.roleNameBefore, expectedTextsMan)
         await AssertionsRoles.assertSuccessMessage(TestConfig.successMsgR)
         await UsersPage.open()
         await UsersPage.waitForPageLoad()
-        await UsersPage.createUserBefore(global.usersNameWeb,global.usersEmailWeb,TestConfig.userPhone)
+        await UsersPage.createUserBefore(global.usersNameRoles,global.usersEmailRoles,TestConfig.userPhone)
     });
 
     it('Create Admin Role successfully.\nA pop-up message for update should be displayed after creating the Role.', async () => {
@@ -46,7 +47,8 @@ describe('Create, Edit, Copy, Disable/Enable Permissions, Delete Roles', () => {
             'Groups',
             'My Score',
             'Dial pad',
-            'Dashboard'
+            'Dashboard',
+            'Messaging'
         ];
         await RolesPage.open()
         await RolesPage.waitForPageLoad()
@@ -73,7 +75,8 @@ describe('Create, Edit, Copy, Disable/Enable Permissions, Delete Roles', () => {
             'Reports',
             'My Score',
             'Dial pad',
-            'Dashboard'
+            'Dashboard',
+            'Messaging'
         ];
         await RolesPage.open()
         await RolesPage.waitForPageLoad()
@@ -95,7 +98,8 @@ describe('Create, Edit, Copy, Disable/Enable Permissions, Delete Roles', () => {
         const expectedTextsAgent = [
             'General',
             'My Score',
-            'Dial pad'
+            'Dial pad',
+            'Messaging'
         ];
         await RolesPage.open()
         await RolesPage.waitForPageLoad()
@@ -171,7 +175,7 @@ describe('Create, Edit, Copy, Disable/Enable Permissions, Delete Roles', () => {
     after(async () => {
         await UsersPage.open()
         await UsersPage.waitForPageLoad()
-        await UsersPage.deleteUser(global.usersNameWeb)
+        await UsersPage.deleteUser(global.usersNameRoles)
         await AssertionsUsers.assertDeleteMessage(TestConfig.deleteMsgU)
         await AssertionsUsers.assertEmptyTable(TestConfig.emptyTable)
     });

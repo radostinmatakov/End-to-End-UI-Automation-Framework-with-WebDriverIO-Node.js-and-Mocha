@@ -28,10 +28,10 @@ class RolesPageN extends Page {
         return $("svg[class='lucide lucide-trash2']");
     } 
     get selectRole () {
-        return $("div[class='css-19bb58m']");
+        return $("div[class=' css-19bb58m']");
     }
     get selectRoleValue () {
-        return $("div[class='css-d7l1ni-option']");
+        return $("div[class=' css-d7l1ni-option']");
     }
     get moveBtn () {
         return $("button[class='btn btn-outline-primary ']");
@@ -59,7 +59,7 @@ class RolesPageN extends Page {
         return $("div[class='text-danger !mt-1']"); 
     }
     get errorTextsLevel () {
-        return $("div[class='text-danger mt-1']");
+        return $("div[class='text-danger']");
     }
     get reassignRolePanel () {
         return $("div[class='p-5']");
@@ -91,11 +91,11 @@ class RolesPageN extends Page {
         for (const field of emptyFields) {
             await expect(field).toBeDisplayed(); 
         }
-        // Assertion: Check that the text Please fill the name field is present under 'Role Name' field
+        // Assertion: Check that the text Role Name is required is present under 'Role Name' field
         const requiredTextName = await this.errorTextName;  
             //console.log('Text under Name:', requiredTextName)  
         await expect(requiredTextName).toBeDisplayed(); 
-        await expect(requiredTextName).toHaveText('Please fill the name field');
+        await expect(requiredTextName).toHaveText('Role Name is required');
         // Assertion: Check that the text Please fill the name field is present under 'Role Name' field
         const requiredTextLevel = await this.errorTextsLevel;  
             //console.log('Text under Level:', requiredTextLevel)  

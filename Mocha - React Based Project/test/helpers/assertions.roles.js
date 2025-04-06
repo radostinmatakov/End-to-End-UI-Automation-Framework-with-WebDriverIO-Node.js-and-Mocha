@@ -12,45 +12,71 @@ class AssertionsRoles {
         return $("(//td[@class='m_4e7aa4ef mantine-Table-td mantine-datatable-pointer-cursor'])[2]");
     }
     get emptyTable() {
+        return $("(//div[@class='mantine-focus-auto m_b6d8b162 mantine-Text-root'])[1]");
+    }
+    get emptyTableTwo() {
         return $("(//div[@class='mantine-focus-auto m_b6d8b162 mantine-Text-root'])[2]");
+    }
+    get emptyTableIcon() {
+        return $("div[class='mantine-datatable-empty-state-icon']");
     }
     get notifyMessage() {
         return $('#swal2-title');
     }
-    get quickView() {
-        return $("div.m_5df29311.text-sm.mantine-Drawer-body"); 
+    get sideview() {
+        return $("div[class='space-y-5 p-5']"); 
     }
-    get quickViewGeneral() {
-        return $("//div[contains(@class, 'grid') and .//p[text()='General']]"); 
+    get sideviewGeneral() {
+        return $("(//button[contains(@class, 'flex justify-between')])[7]"); 
     }
     get permissionsGen () {
-        return $("div.mt-2.flex.gap-1.align-middle.text-center"); 
+        return $("//div[contains(@class, 'px-4 pt-4 pb-2')]//span[contains(text(), 'Enable to see permissions here...')]"); 
     }
-    get quickViewMyScope() {
-        return $("//div[contains(@class, 'grid') and .//p[text()='My Score']]"); 
+    get sideviewMyScope() {
+        return $("(//div[contains(@class, 'grid grid-cols-2')])[2]"); 
     }
     
 
     // Assertions methods to encapsule automation code to interact with the page
     // Message assertion 
     async waitForSuccessMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertSuccessMessage(message) {
         await this.waitForSuccessMessage();
         await expect(this.notifyMessage).toHaveText(expect.stringContaining(message));
     }
-
     async waitForUpdateMessage() {
-        await this.notifyMessage.waitForDisplayed();
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
     }
     async assertUpdateMessage(message) {
         await this.waitForUpdateMessage();
         await expect(this.notifyMessage).toHaveText(expect.stringContaining(message));
     }
     async waitForDeleteMessage() {
-        await this.notifyMessage.waitForDisplayed();
-    }
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
+    } 
     async assertDeleteMessage(message) {
         await this.waitForDeleteMessage();
         await expect(this.notifyMessage).toHaveText(expect.stringContaining(message));
@@ -123,124 +149,116 @@ class AssertionsRoles {
     }
 
     async waitForQuickView() {
-        await this.quickView.waitForDisplayed();
+        await this.sideview.waitForDisplayed();
     }
     async assertDissabledPermissions() {
         await this.waitForQuickView();
         // General permissions
-        const generalText = await this.quickViewGeneral.$('p.text-dark');
+        const generalText = await this.sideviewGeneral.$('(//label[normalize-space()="General"])[1]');
         const actualGeneral = await generalText.getText();
         assert.strictEqual(actualGeneral, 'General', 'Expected "General" text is not present');
-        /* Removed from the UI of the currect version deployd on 06/11/24
-        // Locate the icon
-        const iconGeneral = await this.quickViewGeneral.$('svg.lucide.lucide-x.text-gray');
-        assert.ok(await iconGeneral.isExisting(), 'Expected icon with class "lucide lucide-x text-gray" is not present');
-        */
         // Get and assert the text content
         const actualText = await this.permissionsGen.getText();
-        assert.strictEqual(actualText.trim(), 'General permissions are disabled', 'The text did not match the expected value');
+        assert.strictEqual(actualText.trim(), 'Enable to see permissions here...', 'The text did not match the expected value');
 
         // My Score permissions
-        const MyScoreText = await this.quickViewMyScope.$('p.text-dark'); // Get all <p> elements
+        const MyScoreText = await this.sideviewMyScope.$('//label[normalize-space()="My Score"]'); // Get all <p> elements
         const actualMyScore = await MyScoreText.getText(); 
         assert.strictEqual(actualMyScore, 'My Score', 'Expected "My Score" text is not present');
-        // Locate icons and text for dissabled permissions
-        // For "Own call history"
-        const ownCallHistoryText = await this.quickViewMyScope.$("//p[contains(text(), 'Own call history')]"); // Text locator
-        const ownCallHistoryIcon = await this.quickViewMyScope.$("(//*[name()='svg'][@class='lucide lucide-x text-gray'])[1]"); // Icon locator
-        // Verify the text
-        const actualOwnCallHistory = await ownCallHistoryText.getText();
-        assert.strictEqual(actualOwnCallHistory, 'Own call history', 'Expected "Own call history" text is not present');
-        // Verify the icon existence
-        const iconOwnCallHistory = await ownCallHistoryIcon.isExisting();
-        assert.ok(iconOwnCallHistory, 'Expected icon for "Own call history" is not present');
-        // For "Listen own call"
-        const listenOwnCallText = await this.quickViewMyScope.$("//p[contains(text(), 'Listen own call')]"); // Text locator
-        const listenOwnCallIcon = await this.quickViewMyScope.$("(//*[name()='svg'][@class='lucide lucide-x text-gray'])[2]"); // Icon locator
-        // Verify the text
-        const actualListen = await listenOwnCallText.getText();
-        assert.strictEqual(actualListen, 'Listen own call', 'Expected "Listen own call" text is not present');
-        // Verify the icon existence
-        const iconListen = await listenOwnCallIcon.isExisting();
-        assert.ok(iconListen, 'Expected icon for "Listen own call" is not present');
+        // Verify disabled permissions
+        const permissions = [
+            { label: 'Own call history', selector: 'Own call history' },
+            { label: 'Listen own call', selector: 'Listen own call' },
+            { label: 'Callback action', selector: 'Callback action' },
+            { label: 'Hide Outbound Numbers', selector: 'Hide Outbound Numbers' },
+            { label: 'Hide inbound numbers', selector: 'Hide inbound numbers' }
+        ];
+        
+        for (const { label, selector } of permissions) {
+            console.log(`Checking permission(Dis): ${label}`)
+            const textElement = await this.sideviewMyScope.$(`//label[normalize-space()='${selector}']`);
+            const actualText = await textElement.getText();
+            console.log(`Text found for My Scope(Dis) "${label}": ${actualText}`);
+            assert.strictEqual(actualText, label, `Expected "${label}" text is not present`);
+            // Verify switch state based on label
+            const switchElement = await this.sideviewMyScope.$(`//label[normalize-space()='${selector}']/following-sibling::label/input[@type='checkbox']`);
+            const isChecked = await switchElement.isSelected();
+            // Log the current state of the switch
+            console.log(`Switch for MyScope (Dis)"${label}" is ${isChecked ? 'active' : 'inactive'}`);
+            if (label === 'Own call history' || label === 'Listen own call') {
+                // Ensure that these two switches are inactive (unchecked)
+                assert.ok(!isChecked, `Expected "${label}" switch to be inactive`);
+            } else {
+                // Ensure all other switches are active (checked) for all others
+                assert.ok(isChecked, `Expected "${label}" switch to be active`);
+            }
+        }
     }
     async assertEnabledPermissions() {
         await this.waitForQuickView();
         // General permissions
-        const generalText = await this.quickViewGeneral.$('p.text-dark');
+        const generalText = await this.sideviewGeneral.$('(//label[normalize-space()="General"])[1]');
         const actualGeneral = await generalText.getText();
         assert.strictEqual(actualGeneral, 'General', 'Expected "General" text is not present');
-        /* Removed from the UI of the currect version deployd on 06/11/24
-        // Locate the icon
-        const iconGeneral = await this.quickViewGeneral.$('svg.lucide.lucide-check.text-success');
-        assert.ok(await iconGeneral.isExisting(), 'Expected icon with class "lucide lucide-x text-gray" is not present');
-        */
-        // Locate icons and text for enabled permissions
-        // For "Spy"
-        const SpyText = await this.quickViewMyScope.$("//p[contains(text(), 'Spy')]"); // Text locator
-        const SpyIcon = await this.quickViewMyScope.$("(//*[name()='svg'][@class='lucide lucide-check text-success'])[1]"); // Icon locator
-        const actualSpy = await SpyText.getText();
-        assert.strictEqual(actualSpy, 'Spy', 'Expected "Spy" text is not present');
-        const iconSpy = await SpyIcon.isExisting();
-        assert.ok(iconSpy, 'Expected icon for "Spy" is not present');
-        // For "Whisper"
-        const WhisperText = await this.quickViewMyScope.$("//p[contains(text(), 'Whisper')]"); // Text locator
-        const WhisperIcon = await this.quickViewMyScope.$("(//*[name()='svg'][@class='lucide lucide-check text-success'])[2]"); // Icon locator
-        const actualWhisper = await WhisperText.getText();
-        assert.strictEqual(actualWhisper, 'Whisper', 'Expected "Whisper" text is not present');
-        const iconWhisper = await WhisperIcon.isExisting();
-        assert.ok(iconWhisper, 'Expected icon for "Whisper" is not present');
-        // For "Barge"
-        const BargeText = await this.quickViewMyScope.$("//p[contains(text(), 'Barge')]"); // Text locator
-        const BargeIcon = await this.quickViewMyScope.$("(//*[name()='svg'][@class='lucide lucide-check text-success'])[3]"); // Icon locator
-        const actualBarge = await BargeText.getText();
-        assert.strictEqual(actualBarge, 'Barge', 'Expected "Barge" text is not present');
-        const iconBarge = await BargeIcon.isExisting();
-        assert.ok(iconBarge, 'Expected icon for "Barge" is not present');
-        // For "Personal Settings"
-        const PersonalText = await this.quickViewMyScope.$("//p[contains(text(), 'Personal Settings')]"); // Text locator
-        const Personalcon = await this.quickViewMyScope.$("(//*[name()='svg'][@class='lucide lucide-check text-success'])[4]"); // Icon locator
-        const actualPersonal = await PersonalText.getText();
-        assert.strictEqual(actualPersonal, 'Personal Settings', 'Expected "Personal Settings" text is not present');
-        const iconPersonal = await Personalcon.isExisting();
-        assert.ok(iconPersonal, 'Expected icon for "Personal Settings" is not present');
-        // For "Voice Mail List"
-        const VoiceText = await this.quickViewMyScope.$("//p[contains(text(), 'Voice Mail List')]"); // Text locator
-        const Voicelcon = await this.quickViewMyScope.$("(//*[name()='svg'][@class='lucide lucide-check text-success'])[5]"); // Icon locator
-        const actualVoice = await VoiceText.getText();
-        assert.strictEqual(actualVoice, 'Voice Mail List', 'Expected "Voice Mail List" text is not present');
-        const iconVoice = await Voicelcon.isExisting();
-        assert.ok(iconVoice, 'Expected icon for "Voice Mail List" is not present');
-        // For "Delete Voice Mail"
-        const DeleteText = await this.quickViewMyScope.$("//p[contains(text(), 'Delete Voice Mail')]"); // Text locator
-        const Deletelcon = await this.quickViewMyScope.$("(//*[name()='svg'][@class='lucide lucide-check text-success'])[6]"); // Icon locator
-        const actualDelete = await DeleteText.getText();
-        assert.strictEqual(actualDelete, 'Delete Voice Mail', 'Expected "Delete Voice Mail" text is not present');
-        const iconDelete = await Deletelcon.isExisting();
-        assert.ok(iconDelete, 'Expected icon for "Delete Voice Mail" is not present');
+        // **General Permissions Switches**: Adding similar checks for general permissions as in MyScore
+        const generalPermissions = [
+            { label: 'Spy', selector: 'Spy' },
+            { label: 'Whisper', selector: 'Whisper' },
+            { label: 'Barge', selector: 'Barge' },
+            { label: 'Personal Settings', selector: 'Personal Settings' },
+            { label: 'Voice Mail List', selector: 'Voice Mail List' },
+            { label: 'Delete Voice Mail', selector: 'Delete Voice Mail' },
+            { label: 'Unmask last #', selector: 'Unmask last #' }
+        ];
+
+        for (const { label, selector } of generalPermissions) {
+            // Skip "Unmask last #" because it's not a toggle menu
+            if (label === 'Unmask last #') {
+                console.log(`Skipping permission: ${label}`);
+                continue;  // Skip to the next permission
+            }
+            // Get the label text for the permission
+            const textElement = await this.sideviewGeneral.$(`//label[normalize-space()='${selector}']`);
+            const actualLabelText = await textElement.getText();
+            console.log(`Text found for General "${label}": ${actualLabelText}`);
+            assert.strictEqual(actualLabelText, label, `Expected "${label}" text is not present`);
+            // Verify the state of the switch (should be active for all permissions)
+            const switchElement = await this.sideviewGeneral.$(`//label[normalize-space()='${selector}']/following-sibling::label/input[@type='checkbox']`);
+            const isChecked = await switchElement.isSelected();
+            // Log the current state of the switch
+            console.log(`Switch for General(En) "${label}" is ${isChecked ? 'active' : 'inactive'}`);
+            // Ensure the switch is active (checked)
+            assert.ok(isChecked, `Expected "${label}" switch to be active`);
+        }
+
         // My Score permissions
-        const generalTexts = await this.quickViewMyScope.$('p.text-dark'); // Get all <p> elements
-        const actualText3 = await generalTexts.getText(); // Get the second element
-        assert.strictEqual(actualText3, 'My Score', 'Expected "My Score" text is not present');
-        // Locate icons and text for dissabled permissions
-        // For "Own call history"
-        const ownCallHistoryText = await this.quickViewMyScope.$("//p[contains(text(), 'Own call history')]"); // Text locator
-        const ownCallHistoryIcon = await this.quickViewMyScope.$("(//*[name()='svg'][@class='lucide lucide-check text-success'])[7]"); // Icon locator
-        // Verify the text
-        const actualText4 = await ownCallHistoryText.getText();
-        assert.strictEqual(actualText4, 'Own call history', 'Expected "Own call history" text is not present');
-        // Verify the icon existence
-        const iconExists = await ownCallHistoryIcon.isExisting();
-        assert.ok(iconExists, 'Expected icon for "Own call history" is not present');
-        // For "Listen own call"
-        const listenOwnCallText = await this.quickViewMyScope.$("//p[contains(text(), 'Listen own call')]"); // Text locator
-        const listenOwnCallIcon = await this.quickViewMyScope.$("(//*[name()='svg'][@class='lucide lucide-check text-success'])[8]"); // Icon locator
-        // Verify the text
-        const actualListen = await listenOwnCallText.getText();
-        assert.strictEqual(actualListen, 'Listen own call', 'Expected "Listen own call" text is not present');
-        // Verify the icon existence
-        const iconListen = await listenOwnCallIcon.isExisting();
-        assert.ok(iconListen, 'Expected icon for "Listen own call" is not present');
+        const MyScoreText = await this.sideviewMyScope.$('//label[normalize-space()="My Score"]'); // Get all <p> elements
+        const actualMyScore = await MyScoreText.getText(); 
+        assert.strictEqual(actualMyScore, 'My Score', 'Expected "My Score" text is not present');
+        // Verify disabled permissions
+        const permissions = [
+            { label: 'Own call history', selector: 'Own call history' },
+            { label: 'Listen own call', selector: 'Listen own call' },
+            { label: 'Callback action', selector: 'Callback action' },
+            { label: 'Hide Outbound Numbers', selector: 'Hide Outbound Numbers' },
+            { label: 'Hide inbound numbers', selector: 'Hide inbound numbers' }
+        ];
+        
+        for (const { label, selector } of permissions) {
+            console.log(`Checking permission(En): ${label}`)
+            const textElement = await this.sideviewMyScope.$(`//label[normalize-space()='${selector}']`);
+            const actualText = await textElement.getText();
+            console.log(`Text found for My Scope(En) "${label}": ${actualText}`);
+            assert.strictEqual(actualText, label, `Expected "${label}" text is not present`);
+            
+            // Verify switch state based on label
+            const switchElement = await this.sideviewMyScope.$(`//label[normalize-space()='${selector}']/following-sibling::label/input[@type='checkbox']`);
+            const isChecked = await switchElement.isSelected();
+            // Log the current state of the switch
+            console.log(`Switch for MyScope (En) "${label}" is ${isChecked ? 'active' : 'inactive'}`);
+            // Ensure that the switch is active (checked) for all
+            assert.ok(isChecked, `Expected "${label}" switch to be active`);
+        }
     }
 
     async waitForEmptyTable() {
@@ -259,6 +277,16 @@ class AssertionsRoles {
         await this.waitForEmptyTable(); 
         const messageText = await this.emptyTable.getText();
         expect(messageText).toContain(expectedMessage);
+    }
+    async assertEmptyTableTwo(expectedMessage) {
+        await this.waitForEmptyTable(); 
+        const messageText = await this.emptyTableTwo.getText();
+        expect(messageText).toContain(expectedMessage);
+    }
+    async assertEmptyTableIcon() {
+        await this.waitForEmptyTable(); 
+        const isDisplayed = await this.emptyTableIcon.isDisplayed();
+        expect(isDisplayed).toBe(true);
     }
 }
 

@@ -45,8 +45,8 @@ exports.config = {
 
     before: function (capabilities, specs) {
         // Generate the random name and pass and store it in a global variable or property - USERS before method 
-        global.usersNameWeb = NameGenerator.generateRandomUserNameWeb(); 
-        global.usersEmailWeb = NameGenerator.generateRandomUserEmailWeb(); 
+        global.usersNameRolesN = NameGenerator.generateRandomUserNameRolesN(); 
+        global.usersEmailRolesN = NameGenerator.generateRandomUserRolesN(); 
     },
 
     beforeTest: function (test, context) {

@@ -5,20 +5,30 @@
   "main": "index.js",
   "scripts": {
     "queues": "npx wdio test/conf/Positive/queues.conf.js",
+    "ivr": "npx wdio test/conf/Positive/ivr.conf.js",
+    "ann": "npx wdio test/conf/Positive/ann.conf.js",
+    "tc": "npx wdio test/conf/Positive/timeConditions.conf.js",
     "roles": "npx wdio test/conf/Positive/roles.conf.js",
     "users": "npx wdio test/conf/Positive/users.conf.js",
     "groups": "npx wdio test/conf/Positive/groups.conf.js",
     "statuses": "npx wdio test/conf/Positive/statuses.conf.js",
+    "ext": "npx wdio test/conf/Positive/ext.conf.js",
+    "blacklists": "npx wdio test/conf/Positive/blacklist.conf.js",
+    "mes.queues": "npx wdio test/conf/Positive/mes.queues.conf.js",
+    "ip": "npx wdio test/conf/Positive/ip.conf.js",
 
     "queues_N": "npx wdio test/conf/Negative/queues.conf_N.js",
     "roles_N": "npx wdio test/conf/Negative/roles.conf_N.js",
     "users_N": "npx wdio test/conf/Negative/users.conf_N.js",
-    "groups_N": "npx wdio test/conf/Negative/groups.conf_N.js"
+    "groups_N": "npx wdio test/conf/Negative/groups.conf_N.js",
+    "statuses_N": "npx wdio test/conf/Negative/statuses.conf_N.js",
+    "ext_N": "npx wdio test/conf/Positive/ext.conf.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.8.4",
     "chai": "^5.1.1",
     "mocha": "^10.4.0",
     "selenium-standalone": "^9.5.0",

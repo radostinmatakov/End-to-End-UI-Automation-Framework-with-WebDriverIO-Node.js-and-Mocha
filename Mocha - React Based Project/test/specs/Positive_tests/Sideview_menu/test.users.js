@@ -1,7 +1,9 @@
-const LoginPageAdmin = require('../../pageobjects_main/login.page.admin.js')
-const UsersPage = require('../../pageobjects_main/pageobjects/users.page')
-const AssertionsUsers = require('../../helpers/assertions.users')
-const TestConfig = require('../../data/TestConfig');
+const LoginPageAdmin = require('../../../pageobjects_main/login.page.admin.js')
+const UsersPage = require('../../../pageobjects_main/pageobjects/Sideview menu/Users and Permissions/users.page.js')
+const ExtPage = require('../../../pageobjects_main/pageobjects/Sideview menu/Users and Permissions/ext.page')
+const AssertionsUsers = require('../../../helpers/assertions.users.js')
+const AssertionsExt = require('../../../helpers/assertions.ext.js')
+const TestConfig = require('../../../data/TestConfig.js');
 
 describe('Login in Axiom as admin', () => {
     it('Succsesfully login with valid credentials', async () => {
@@ -14,74 +16,88 @@ describe('Create, Edit, Reset password and Delete Users', () => {
     it('Create Admin User - WEB successfully.\nA pop-up message for update should be displayed after creating the User.', async () => {
         await UsersPage.open()
         await UsersPage.waitForPageLoad()
-        await UsersPage.createUserAdminWEB(global.usersNameWeb,global.usersEmailWeb,TestConfig.userPhone)
-        //await browser.debug();
+        await UsersPage.createUserAdminWEB(global.usersNameWeb, global.usersEmailWeb, TestConfig.userPhone, TestConfig.userExtWebName, TestConfig.userExtWebNumber, TestConfig.successMsgE)
         await AssertionsUsers.assertSuccessMessage(TestConfig.successMsgU)
+        await UsersPage.closeNotification()
     })
 
     it('Search the created Admin User - WEB successfully.\nAssert all text atributes are present and correct.', async () => {
         await UsersPage.open()
         await UsersPage.waitForPageLoad()
+        await browser.pause(2000)
         await UsersPage.searchUser(global.usersNameWeb) 
-        await AssertionsUsers.assertCreatedWebUserAttributesText(TestConfig.extWeb, TestConfig.extTypeWeb, TestConfig.statusActive, TestConfig.groupsWeb, TestConfig.userPhone, TestConfig.userLevelAdmin, TestConfig.userRoleAdmin)
-        await UsersPage.openQeickView()
-        await AssertionsUsers.assertCreateWebQucikViewAtributes()
+        await browser.pause(3000)
+        await AssertionsUsers.assertCreatedWebUserAttributesText(TestConfig.userExtWebNumber)
+        await UsersPage.clearSearch()
     })
 
     it('Create Manager User - SIP successfully.\nA pop-up message for update should be displayed after creating the User.', async () => {
         await UsersPage.open()
         await UsersPage.waitForPageLoad()
-        await UsersPage.createUserSIP(global.usersNameSip, global.usersEmailSip, TestConfig.userPhone)
+        await UsersPage.createUserSIP(global.usersNameSip, global.usersEmailSip, TestConfig.userPhone, TestConfig.userExtSipName, TestConfig.userExtSipNumber, TestConfig.successMsgE)
         await AssertionsUsers.assertSuccessMessage(TestConfig.successMsgU)
+        await UsersPage.closeNotification()
     })
 
     it('Search the created Manager User - SIP successfully.\nAssert all text atributes are present and correct.', async () => {
-        await UsersPage.open()
-        await UsersPage.waitForPageLoad()
         await UsersPage.searchUser(global.usersNameSip) 
-        await AssertionsUsers.assertCreatedSipUserAttributesText(TestConfig.extSip, TestConfig.extTypeSip, TestConfig.statusActive, TestConfig.groupsSip, TestConfig.userPhone, TestConfig.userLevelManager, TestConfig.userRoleManager, TestConfig.forceLogin)
-        await UsersPage.openQeickView()
-        await AssertionsUsers.assertCreateSipQucikViewAtributes()
+        await browser.pause(3000)
+        await AssertionsUsers.assertCreatedSipUserAttributesText(TestConfig.userExtSipNumber)
+        await UsersPage.clearSearch()
     })
 
     it('Edit User successfully.\nA pop-up message for update should be displayed after editing the User.', async () => {
-        await UsersPage.open()
         await UsersPage.waitForPageLoad()
         await UsersPage.editUserWeb(global.usersNameWeb, global.editUsersNameWeb, global.usersPass)
         await AssertionsUsers.assertUpdateMessage(TestConfig.updateMsgU)
+        await UsersPage.closeNotification()
+        await UsersPage.clearSearch()
     })
 
     it('Search the edited User successfully.\nAssert all text atributes are present and correct.', async () => {
-        await UsersPage.open()
         await UsersPage.waitForPageLoad()
+        await browser.pause(2000)
         await UsersPage.searchUser(global.editUsersNameWeb) 
+        await browser.pause(3000)
         await AssertionsUsers.assertEditedWebUserAttributesText(TestConfig.statusInactive)
-        await UsersPage.openQeickView()
-        await AssertionsUsers.assertEditedWebQucikViewAtributes()
+        await UsersPage.clearSearch()
+        
     })
-
-    it('Edit User from Quick View successfully.\nA pop-up message for update should be displayed after editing the User.', async () => {
-        await UsersPage.open()
-        await UsersPage.waitForPageLoad()
-        await UsersPage.editUserSip(global.usersNameSip, global.editUsersNameSip, global.usersPass)
-        await AssertionsUsers.assertUpdateMessage(TestConfig.updateMsgU)
-    })
-
+    
     it('Reset password of a User successfully.\nA pop-up message for update should be displayed after resetting the pass.', async () => {
-        await UsersPage.open()
-        await UsersPage.waitForPageLoad()
-        await UsersPage.resetPass(global.editUsersNameSip)
+        await UsersPage.resetPass(global.editUsersNameWeb)
         await AssertionsUsers.assertResetMessage(TestConfig.resetPassMsgU)
+        await UsersPage.closeNotification()
+        await UsersPage.clearSearch()
     })
 
     it('Delete User successfully.\nA pop-up message for update should be displayed after deleting the User.', async () => {
-        await UsersPage.open()
         await UsersPage.waitForPageLoad()
-        await UsersPage.deleteUser(global.editUsersNameSip)
+        await UsersPage.deleteUser(global.usersNameSip)
         await AssertionsUsers.assertDeleteMessage(TestConfig.deleteMsgU)
         await AssertionsUsers.assertEmptyTable(TestConfig.emptyTable)
+        await AssertionsUsers.assertEmptyTableIcon()
+        await UsersPage.closeNotification()
         await UsersPage.deleteUser(global.editUsersNameWeb)
         await AssertionsUsers.assertDeleteMessage(TestConfig.deleteMsgU)
         await AssertionsUsers.assertEmptyTable(TestConfig.emptyTable)
+        await AssertionsUsers.assertEmptyTableIcon()
     })
+
+    after(async () => {
+        await ExtPage.open()
+        await ExtPage.waitForPageLoad()
+        await ExtPage.deleteExt(TestConfig.userExtWebName) 
+        await AssertionsExt.assertDeleteMessage(TestConfig.deleteMsgE)
+        await ExtPage.closeNotification()
+        //await AssertionsExt.assertEmptyTable(TestConfig.emptyTable)
+        //await AssertionsExt.assertEmptyTableTwo(TestConfig.emptyTable)
+        await AssertionsExt.assertEmptyTableIcon()
+        await ExtPage.deleteExt(TestConfig.userExtSipName) 
+        await AssertionsExt.assertDeleteMessage(TestConfig.deleteMsgE)
+        await ExtPage.closeNotification()
+        //await AssertionsExt.assertEmptyTable(TestConfig.emptyTable)
+        //await AssertionsExt.assertEmptyTableTwo(TestConfig.emptyTable)
+        await AssertionsExt.assertEmptyTableIcon()
+    });
 })

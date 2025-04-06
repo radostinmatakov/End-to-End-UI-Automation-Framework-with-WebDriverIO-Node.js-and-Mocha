@@ -1,5 +1,5 @@
 const { $ } = require('@wdio/globals')
-const Page = require('../page');
+const Page = require('../../../page');
 const assert = require('assert');
 
 
@@ -10,12 +10,12 @@ class GroupsPage extends Page {
     // Define selectors using getter methods
     // Getter for method waitForPageLoad
     get table () {
-        return $("div[class='mantine-datatable mantine-datatable-with-border dark:bg-dark']");
+        return $("svg[class='lucide lucide-trash2']");
     }
 
     // Getters for Create Groups
-    get newGroup () {
-        return $("button[class='btn btn-outline-primary ']");
+    get addGroup () {
+        return $("//button[contains(@class, 'btn') and text()='+ Add Group']");
     }
     get name () {
         return $("input[id='name']");
@@ -24,15 +24,15 @@ class GroupsPage extends Page {
         return $("input[id='descr']");
     }
     get addAgent () {
-        return $("svg[class='lucide lucide-plus cursor-pointer text-success']");
+        return $("svg[class='lucide lucide-plus cursor-pointer ']");
     }
     get removeAgent () {
-        return $("svg[class='lucide lucide-x cursor-pointer text-danger']");
+        return $("svg[class='lucide lucide-x cursor-pointer']");
     }
 
     // Getters for Edit Groups
-    get editBtn () {
-        return $("svg[class='lucide lucide-pencil']");
+    get opneEditSideview () {
+        return $('tr[class="m_4e7aa4fd mantine-Table-tr mantine-datatable-row"]');
     }
 
     // Getters for Delete Groups
@@ -45,13 +45,19 @@ class GroupsPage extends Page {
 
     // Reusible getters for all 
     get createBtn () {
-        return $("button[class='btn btn-outline-success ']");
+        return $("//button[contains(@class, 'btn') and text()='Create']");
+    }
+    get saveBtn () {
+        return $("//button[contains(@class, 'btn') and text()='Save']");
     }
     get searchBar () {
-        return $("(//input[@placeholder='Search...'])[2]");
+        return $("input[placeholder='Search...']");
     }
-    get quickViewRow() {
-        return $("tr[class='m_4e7aa4fd mantine-Table-tr mantine-datatable-row']"); 
+    get closeSwal2 () {
+        return $("button[class='swal2-close']");
+    }
+    get notifyMessage() {
+        return $('#swal2-title');
     }
 
     // Getters for inner assettions 
@@ -61,7 +67,7 @@ class GroupsPage extends Page {
     get members() {
         return $("span[class='text-base font-light']");
     }
-
+    
     // Async methods to wait until a specific element on the page is visible or present
     async waitForPageLoad() {
         await browser.waitUntil(async () => {
@@ -70,9 +76,20 @@ class GroupsPage extends Page {
     }
     
     // Async methods to encapsule automation code to interact with the page
-    // Create new Group
+    // Create new Group for Ext tests
+    async createGroupExt (name, desc) { 
+        await this.addGroup.click();
+        await browser.pause(500); // Pause for 0,5 seconds to observe
+        await this.name.setValue(name);
+        await browser.pause(300); // Pause for 0,3 seconds to observe
+        await this.desc.setValue(desc);
+        await browser.pause(500); // Pause for 0,5 seconds to observe
+        await browser.execute((el) => el.click(), await this.createBtn);
+    }      
+    
+    // Create new Group 
     async createGroup (name, desc, search, searchTwo) { 
-        await this.newGroup.click();
+        await this.addGroup.click();
         await browser.pause(500); // Pause for 0,5 seconds to observe
         await this.name.setValue(name);
         await browser.pause(300); // Pause for 0,3 seconds to observe
@@ -92,11 +109,10 @@ class GroupsPage extends Page {
         await browser.execute((el) => el.click(), await this.createBtn);
     }       
 
-
     async editGroup (search, name_edit, desc_edit) { 
         await this.searchBar.setValue(search);
         await browser.pause(500); // Pause for 0,5 seconds to observe
-        await this.editBtn.click();
+        await this.opneEditSideview.click();
         await browser.pause(500); // Pause for 0,5 seconds to observe
         await this.name.doubleClick(); // Focus the input
         await browser.keys(['Control', 'a']); // Select all text
@@ -115,7 +131,7 @@ class GroupsPage extends Page {
         const actualText = await membersCount.getText();
         assert.strictEqual(actualText.trim(), '2', `Expected text to be "2" but got "${actualText.trim()}"`);
         await browser.pause(500); // Pause for 0,5 seconds to observe
-        await browser.execute((el) => el.click(), await this.createBtn);
+        await browser.execute((el) => el.click(), await this.saveBtn);
     }  
 
     async deleteGroup (search) { 
@@ -127,13 +143,8 @@ class GroupsPage extends Page {
         await browser.pause(500); // Pause for 0,5 seconds to observe
     }  
 
-    async searchGroup (search) { 
-        await this.searchBar.setValue(search);
-        await browser.pause(500); // Pause for 0,5 seconds to observe
-    } 
-
     async editAssert () { 
-        await this.editBtn.click();
+        await this.opneEditSideview.click();
         await browser.pause(500); // Pause for 0,5 seconds to observe
         await this.container.waitForDisplayed({
             timeout: 5000, // Wait up to 5 seconds
@@ -149,8 +160,27 @@ class GroupsPage extends Page {
             //console.log(`Number of child elements found: ${childElements.length}`);
     } 
 
-    async openQeickView () {
-        await this.quickViewRow.click(); 
+    async searchGroup (search) { 
+        await this.searchBar.setValue(search);
+        await browser.pause(500); // Pause for 0,5 seconds to observe
+    } 
+
+    async clearSearch () {
+        await this.searchBar.click(); // Focus the input
+        await browser.keys(['Control', 'a']); // Select all text
+        await browser.keys('Backspace'); // Clear the selected text
+    }
+
+    async closeNotification () {
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
+        await this.closeSwal2.click(); 
     }
 
     // Overwrite specific options to adapt it to page object

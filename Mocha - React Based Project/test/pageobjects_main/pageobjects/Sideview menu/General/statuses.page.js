@@ -1,5 +1,5 @@
 const { $ } = require('@wdio/globals')
-const Page = require('../page');
+const Page = require('../../../page');
 const assert = require('assert');
 
 /**
@@ -9,12 +9,12 @@ class StatusPage extends Page {
     // Define selectors using getter methods
     // Getter for method waitForPageLoad
     get table () {
-        return $("div[class='panel']");
+        return $("svg[class='lucide lucide-trash2']");
     }
 
     // Getters for Create Status
     get newStatus() {
-        return $("button[class='btn btn-outline-outline-primary ltr:ml-auto mr-10']");
+        return $("//button[contains(@class, 'btn') and text()='+ Add Status']");
     }
     get name() {
         return $("input[id='name']");
@@ -23,18 +23,15 @@ class StatusPage extends Page {
         return $("div[class='flex items-center gap-2 w-full']");
     }
     get iconSelect() {
-        return $("svg[class='lucide lucide-aarrow-down shrink-0  undefined']");
+        return $("//div[contains(@class, 'cursor-pointer') and @title='AArrowDown']");
     }
     
     // Getters for Edit Status
-    get editBtn () {
-        return $("svg[class='lucide lucide-pencil']");
-    }
-    get editBtnQucikView () {
-        return $("svg[class='lucide lucide-pencil ml-2 w-5 h-5 text-primary']");
+    get nameEdit() {
+        return $("input[id='name']");
     }
     get iconSelectEdit() {
-        return $("svg[class='lucide lucide-air-vent shrink-0  undefined']");
+        return $("//div[contains(@class, 'cursor-pointer') and @title='AirVent']");
     }
     get type() {
         return $("//select[@name='type']/option[normalize-space(text())='Work']");
@@ -45,30 +42,41 @@ class StatusPage extends Page {
     get activeToggle () {
         return $("input.custom_switch");
     }
-    get closeQuickView () {
-        return $("button.mantine-Drawer-close[data-variant='subtle']");
-    }
 
     // Getters for Delete Status
     get deleteBtn () {
         return $("svg[class='lucide lucide-trash2']");
     }
     get yesButton () {
-        return $("button[class='btn btn-outline-primary ']");
+        return $("//button[contains(@class, 'btn') and text()='Yes']");
     }
-   
+
+    // Getters for Status header(assertions that is present in the header)
+    get header () {
+        return $("//span[contains(@class, 'font-semibold') and text()='Available']");
+    }
+
     // Getters for Reusable locators for all methods
     get searchBar () {
-        return $("(//input[@placeholder='Search...'])[2]");
+        return $("//input[@placeholder='Search...']");
+    }
+    get searchBarIcon () {
+        return $("(//input[contains(@class, 'w-full')])[4]");
     }
     get createBtn () {
-        return $("button[class='btn btn-outline-success ']");
+        return $("//button[contains(@class, 'btn') and text()='Create']");
     }
-    get quickViewRow() {
-        return $("tr[class='m_4e7aa4fd mantine-Table-tr mantine-datatable-row']"); 
+    get saveBtn () {
+        return $("//button[contains(@class, 'btn') and text()='Save']");
     }
-    get quickViewRowInactive() {
-        return $("tr[class='m_4e7aa4fd mantine-Table-tr mantine-datatable-row disabled']"); 
+    get closeSwal2 () {
+        return $("button[class='swal2-close']");
+    }
+    get notifyMessage() {
+        return $('#swal2-title');
+    }
+    get opneEditSideview () {
+        return $('tr[class="m_4e7aa4fd mantine-Table-tr mantine-datatable-row"]');
     }
     
     // Async methods to wait until a specific element on the page is visible or present
@@ -80,30 +88,40 @@ class StatusPage extends Page {
 
     // Async methods to encapsule automation code to interact with the page
     // Create new Status
-    async createStatus (name) { 
+    async createStatus (name, searchIcon) { 
         await this.newStatus.click();
         await browser.pause(500); // Pause for 0,5 seconds to observe
         await this.name.setValue(name);
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.icon.click();
         await browser.pause(300); // Pause for 0,3 seconds to observe
+        await this.searchBarIcon.setValue(searchIcon);
+        await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.iconSelect.click();
         await browser.pause(500); // Pause for 0,5 seconds to observe
-        await this.createBtn.scrollIntoView({ block: 'center', behavior: 'smooth' });
         await this.createBtn.waitForClickable();
         await this.createBtn.click();
     }
 
-    async editStatusQuickView (name) { 
-        await this.editBtnQucikView.click(); 
-        await browser.pause(500); // Pause for 0,5 seconds to observe
-        await this.name.click(); // Focus the input
+    async openHeader () { 
+        await this.header.waitForClickable();
+        await this.header.click();
+    }
+
+    async editStatus (search, nameEdit, searchIcon) { 
+        await this.searchBar.setValue(search);
+        await browser.pause(300); // Pause for 0,3 seconds to observe
+        await this.opneEditSideview.click();
+        await browser.pause(300); // Pause for 0,3 seconds to observe
+        await this.nameEdit.doubleClick(); // Focus the input
         await browser.keys(['Control', 'a']); // Select all text
         await browser.keys('Backspace'); // Clear the selected text
         await browser.pause(300); // Pause for 0,3 seconds to observe
-        await this.name.setValue(name);
+        await this.nameEdit.setValue(nameEdit);
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.icon.click();
+        await browser.pause(300); // Pause for 0,3 seconds to observe
+        await this.searchBarIcon.setValue(searchIcon);
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.iconSelectEdit.click();
         await browser.pause(300); // Pause for 0,3 seconds to observe
@@ -113,24 +131,14 @@ class StatusPage extends Page {
         await browser.pause(300); // Pause for 0,3 seconds to observe
         await this.activeToggle.click();
         await browser.pause(500); // Pause for 0,5 seconds to observe
-        await this.createBtn.scrollIntoView({ block: 'center', behavior: 'smooth' });
-        await this.createBtn.waitForClickable();
-        await this.createBtn.click();
+        //await this.createBtn.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        await this.saveBtn.waitForClickable();
+        await this.saveBtn.click();
     }
 
-    async editStatus () { 
-        await this.closeQuickView.click();
+    async deleteStatus (search) { 
+        await this.searchBar.setValue(search);
         await browser.pause(300); // Pause for 0,3 seconds to observe
-        await this.editBtn.click(); 
-        await browser.pause(500); // Pause for 0,5 seconds to observe
-        await this.activeToggle.click();
-        await browser.pause(500); // Pause for 0,5 seconds to observe
-        await this.createBtn.scrollIntoView({ block: 'center', behavior: 'smooth' });
-        await this.createBtn.waitForClickable();
-        await this.createBtn.click();
-    }
-
-    async deleteStatus () { 
         await this.deleteBtn.click();
         await browser.pause(500); // Pause for 0,5 seconds to observe
         await this.yesButton.click(); 
@@ -141,12 +149,22 @@ class StatusPage extends Page {
         await this.searchBar.setValue(search);
     }
 
-    async openQeickView () {
-        await this.quickViewRow.click(); 
+    async clearSearch () {
+        await this.searchBar.click(); // Focus the input
+        await browser.keys(['Control', 'a']); // Select all text
+        await browser.keys('Backspace'); // Clear the selected text
     }
 
-    async openQeickViewInactive () {
-        await this.quickViewRowInactive.click(); 
+    async closeNotification () {
+        await browser.waitUntil(
+            async () => await this.notifyMessage.waitForDisplayed(),
+            {
+                timeout: 25000, // Maximum time to wait in milliseconds (25 seconds)
+                interval: 500,  // Interval between condition checks in milliseconds (0.5 seconds)
+                timeoutMsg: 'Success message did not appear within the expected time.' // Custom error message
+            }
+        );
+        await this.closeSwal2.click(); 
     }
 
     // Overwrite specific options to adapt it to page object

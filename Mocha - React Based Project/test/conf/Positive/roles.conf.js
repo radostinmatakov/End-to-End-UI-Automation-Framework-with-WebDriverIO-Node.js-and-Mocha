@@ -3,7 +3,7 @@ exports.config = {
     runner: 'local',
 
     specs: [
-        '../../specs/Positive tests/test.roles.js'
+        '../../specs/Positive_tests/Sideview_menu/test.roles.js'
     ],
 
     capabilities: [  
@@ -45,8 +45,8 @@ exports.config = {
     
     before: function (capabilities, specs) {
         // Generate the random name and pass and store it in a global variable or property - USERS before method 
-        global.usersNameWeb = NameGenerator.generateRandomUserNameWeb(); 
-        global.usersEmailWeb = NameGenerator.generateRandomUserEmailWeb(); 
+        global.usersNameRoles = NameGenerator.generateRandomUserNameRoles(); 
+        global.usersEmailRoles = NameGenerator.generateRandomUserRoles(); 
     },
 
     beforeTest: function (test, context) {

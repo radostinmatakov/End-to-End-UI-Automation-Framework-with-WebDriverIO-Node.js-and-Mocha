@@ -68,8 +68,11 @@ class QueuesPageN extends Page {
     get errorText () {
         return $("div[class='text-danger !mt-1']"); // For Name field
     }
-    get textError () {
-        return $("div[class='text-danger mt-1']"); // For Number field and Agent Timeout field
+    get textErrorNumber () {
+        return $("div[class='text-danger mt-1']"); // For Number field
+    }
+    get textErrorAtF () {
+        return $("div[class='text-danger']"); // For Agent Timeout field
     }
     get errorTexts () {
         return $$("div[class='text-danger mt-1']"); // For All other fields
@@ -139,7 +142,7 @@ class QueuesPageN extends Page {
         await expect(errorName).toBeDisplayed(); 
             //console.log('Number error fields:', errorField);
         // Assertion: Check that Number field has error message
-        const requiredNumber = await this.textError;   
+        const requiredNumber = await this.textErrorNumber;   
         await expect(requiredNumber).toBeDisplayed(); 
         await expect(requiredNumber).toHaveText('Queue number is taken');
             //console.log('Number error fields text:', requiredText);
@@ -169,7 +172,7 @@ class QueuesPageN extends Page {
             //console.log('Timeout error fields:', errorFields); 
         await expect(errorFields).toBeDisplayed(); 
         // Assertion: Check that Agent Timeout field has error message
-        const requiredText = await this.textError;   
+        const requiredText = await this.textErrorAtF;   
         await expect(requiredText).toBeDisplayed(); 
         await expect(requiredText).toHaveText('Agent Timeout must be less or equal than the maximum waiting time');
             //console.log('Timeout error fields text:', requiredText);
