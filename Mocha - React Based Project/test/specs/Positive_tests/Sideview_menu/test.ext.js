@@ -108,7 +108,7 @@ describe('Check and Update Ext Limit if necessary by API requests', () => {
                 maxusers: currentLimit + 10 // Increase limit by 10
             };
 
-            const response = await axios.post('https://uat.squaretalk.com/v1/limit', payload, {
+            const response = await axios.post('https://someUrl', payload, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -118,7 +118,7 @@ describe('Check and Update Ext Limit if necessary by API requests', () => {
             expect(response.status).toEqual(200);
 
             // Verify Limit After Update
-            const responseAfter = await axios.get(`https://uat.squaretalk.com/v1/limit?user=admin@squaretalk.com&pass=Th%23g^sa!jkpl`);
+            const responseAfter = await axios.get(`https://someUrl`);
             updatedLimit = responseAfter.data.data.limit; 
             console.log('Current Limit of Ext after Update:', updatedLimit);
             expect(responseAfter.status).toEqual(200);
