@@ -18,17 +18,15 @@ describe('Login in Axiom as admin', () => {
 describe('Check and Update Ext Limit if necessary by API requests', () => {
     let currentLimit;
     let currentNumber;
-    const user = "admin@squaretalk.com";
-    const pass = "Th#g^sa!jkpl";
 
     before(async () => {
         // Fetch Current Limit of Ext
-        const limitResponse = await axios.get(`https://uat.squaretalk.com/v1/limit?user=admin@squaretalk.com&pass=Th%23g^sa!jkpl`);
+        const limitResponse = await axios.get(`https://someUrl`);
         currentLimit = limitResponse.data.data.limit; 
         console.log('Current Limit of Ext:', currentLimit);
 
         // Fetch Current Number of Ext
-        const numberResponse = await axios.get(`https://uat.squaretalk.com/v1/limit/current-ext?user=admin@squaretalk.com&pass=Th%23g^sa!jkpl`);
+        const numberResponse = await axios.get(`https://someUrl`);
         currentNumber = numberResponse.data.data.count; 
         console.log('Current Number of Ext:', currentNumber);
 
